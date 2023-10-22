@@ -129,7 +129,7 @@ public class TrainDeparture {
    * @throws IllegalArgumentException if track is not a positive integer.
    */
   public void setTrack(int track) {
-    if (track < 0) {
+    if (track <= 0) {
       throw new IllegalArgumentException("Track must be a positive integer");
     }
     this.track = track;
@@ -142,7 +142,7 @@ public class TrainDeparture {
    * @throws DateTimeException if delay is a negative time.
    */
   public void setDelay(LocalTime delay) {
-    if (delay.isBefore(LocalTime.of(0, 0))) {
+    if (delay.isBefore(LocalTime.of(0, 0)) || delay.equals(LocalTime.of(0, 0)))  {
       throw new DateTimeException("Delay must be a positive time");
     }
     this.delay = delay;
