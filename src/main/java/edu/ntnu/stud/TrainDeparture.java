@@ -45,16 +45,15 @@ public class TrainDeparture {
    * @param line          the line. Immutable once initialized.
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
-   * @param track         the track. Mutable.
    * @param delay         the delay. Mutable.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
-      int track, LocalTime delay) {
+      LocalTime delay) {
     this.departureTime = departureTime;
     this.line = line;
     this.trainNumber = trainNumber;
     this.destination = destination;
-    this.track = track;
+    this.track = -1;
     this.delay = delay;
   }
 
@@ -120,8 +119,12 @@ public class TrainDeparture {
    * Sets the track of the train.
    *
    * @param track the track.
+   * @throws IllegalArgumentException if track is not -1 or a positive integer.
    */
   public void setTrack(int track) {
+    if (track > 0 && track != -1) {
+      throw new IllegalArgumentException("Track must be -1 or a positive integer");
+    }
     this.track = track;
   }
 
@@ -129,8 +132,12 @@ public class TrainDeparture {
    * Sets the delay of the train.
    *
    * @param delay the delay.
+   * @throws IllegalArgumentException if delay is a negative time.
    */
   public void setDelay(LocalTime delay) {
+    if (delay.isBefore(LocalTime.MIDNIGHT)) {
+      throw new IllegalArgumentException("Delay must be a positive time");
+    }
     this.delay = delay;
   }
 
