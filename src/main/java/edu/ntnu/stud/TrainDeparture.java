@@ -156,8 +156,7 @@ public class TrainDeparture {
   /**
    * Provides a string representation of a Traindeparture object.
    *
-   * @return A string detailing the departure time, line, train number, destination, track and delay
-   * of the train.
+   * @return A string detailing the information about the departure.
    */
   @Override
   public String toString() {
