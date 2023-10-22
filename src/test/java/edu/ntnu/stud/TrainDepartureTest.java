@@ -73,4 +73,41 @@ class TrainDepartureTest {
     trainDeparture.setDelay(LocalTime.of(0, 1));
     assertEquals(LocalTime.of(12, 1), trainDeparture.getDepartureTimeWithDelay());
   }
+
+  @Test
+  void constructorThrowsExceptionForNullDepartureTime() {
+    assertThrows(NullPointerException.class, () -> new TrainDeparture(null, "L1", 1, "Spikkestad", LocalTime.of(0, 0)));
+  }
+
+  @Test
+  void constructorThrowsExceptionForNullLine() {
+    assertThrows(NullPointerException.class, () -> new TrainDeparture(LocalTime.of(12, 0), null, 1, "Spikkestad", LocalTime.of(0, 0)));
+  }
+
+  @Test
+  void constructorThrowsExceptionForNullDestination() {
+    assertThrows(NullPointerException.class, () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, null, LocalTime.of(0, 0)));
+  }
+
+  @Test
+  void constructorThrowsExceptionForNullDelay() {
+    assertThrows(NullPointerException.class, () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", null));
+  }
+
+  @Test
+  void testForLongDelays() {
+    trainDeparture.setDelay(LocalTime.of(13, 0));
+    assertEquals(LocalTime.of(1, 0), trainDeparture.getDepartureTimeWithDelay());
+  }
+
+  @Test
+  void testToString() {
+    String expected = "---TrainDeparture---\n[departureTime=12:00, line=L1, trainNumber=1, destination=Spikkestad, track=-1, delay=00:00]";
+    assertEquals(expected, trainDeparture.toString());
+  }
+
+  @Test
+  void setDelayThrowsExceptionForExactZero() {
+    assertThrows(DateTimeException.class, () -> trainDeparture.setDelay(LocalTime.of(0, 0)));
+  }
 }
