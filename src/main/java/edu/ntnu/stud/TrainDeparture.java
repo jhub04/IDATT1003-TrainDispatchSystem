@@ -13,7 +13,7 @@ import java.time.LocalTime;
  * <p>Data and Data Types:</p>
  * - departureTime (Localtime): The departure time for the train. - line (String): The line the
  * train is on. - trainNumber (int): The train number. - destination (String): The destination of
- * the train. - track (String): The track the train departs from. - delay (LocalTime): The delay of
+ * the train. - track (int): The track the train departs from. - delay (LocalTime): The delay of
  * the train, if any.
  *
  * <p>Reasons for Data Types Choices:</p>
@@ -27,7 +27,9 @@ import java.time.LocalTime;
  * they won't ever change.
  *
  * <p>Handling Invalid Data </p>
- * ...
+ * - Throwing a NullPointerException if any of the initial parameters are null.
+ * - Throwing an IllegalArgumentException if track is not a positive integer.
+ * - Throwing a DateTimeException if delay is a negative time.
  */
 
 public class TrainDeparture {
@@ -47,9 +49,13 @@ public class TrainDeparture {
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param delay         the delay. Mutable.
+   * @throws NullPointerException if any of the parameters are null.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) {
+    if (departureTime == null || line == null || destination == null || delay == null) {
+      throw new NullPointerException("Null values are not allowed");
+    }
     this.departureTime = departureTime;
     this.line = line;
     this.trainNumber = trainNumber;
@@ -136,7 +142,7 @@ public class TrainDeparture {
    * @throws DateTimeException if delay is a negative time.
    */
   public void setDelay(LocalTime delay) {
-    if (delay.isBefore(LocalTime.MIDNIGHT)) {
+    if (delay.isBefore(LocalTime.of(0, 0))) {
       throw new DateTimeException("Delay must be a positive time");
     }
     this.delay = delay;
