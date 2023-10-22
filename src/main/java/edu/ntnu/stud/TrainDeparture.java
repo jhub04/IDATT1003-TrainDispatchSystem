@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import java.time.DateTimeException;
 import java.time.LocalTime;
 
 /**
@@ -119,11 +120,11 @@ public class TrainDeparture {
    * Sets the track of the train.
    *
    * @param track the track.
-   * @throws IllegalArgumentException if track is not -1 or a positive integer.
+   * @throws IllegalArgumentException if track is not a positive integer.
    */
   public void setTrack(int track) {
-    if (track > 0 && track != -1) {
-      throw new IllegalArgumentException("Track must be -1 or a positive integer");
+    if (track < 0) {
+      throw new IllegalArgumentException("Track must be a positive integer");
     }
     this.track = track;
   }
@@ -132,14 +133,37 @@ public class TrainDeparture {
    * Sets the delay of the train.
    *
    * @param delay the delay.
-   * @throws IllegalArgumentException if delay is a negative time.
+   * @throws DateTimeException if delay is a negative time.
    */
   public void setDelay(LocalTime delay) {
     if (delay.isBefore(LocalTime.MIDNIGHT)) {
-      throw new IllegalArgumentException("Delay must be a positive time");
+      throw new DateTimeException("Delay must be a positive time");
     }
     this.delay = delay;
   }
 
+  // Other methods
+
+  /**
+   * Gets the departure time with the delay added.
+   *
+   * @return the updated departure time.
+   */
+  public LocalTime getDepartureTimeWithDelay() {
+    return departureTime.plusHours(delay.getHour()).plusMinutes(delay.getMinute());
+  }
+
+  /**
+   * Provides a string representation of a Traindeparture object.
+   *
+   * @return A string detailing the departure time, line, train number, destination, track and delay
+   * of the train.
+   */
+  @Override
+  public String toString() {
+    return "---TrainDeparture---\n[departureTime=" + departureTime + ", line=" + line
+        + ", trainNumber=" + trainNumber + ", destination=" + destination + ", track=" + track
+        + ", delay=" + delay + "]";
+  }
 
 }
