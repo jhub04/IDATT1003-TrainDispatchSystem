@@ -5,31 +5,12 @@ import java.time.LocalTime;
 
 /**
  * Represents a train departure.
- *
- * <p>Role/Responsibility:</p>
  * This class acts as a model for a single train departure. It stores the departure time, line,
  * train number, destination, track and delay of a train
  *
- * <p>Data and Data Types:</p>
- * - departureTime (Localtime): The departure time for the train. - line (String): The line the
- * train is on. - trainNumber (int): The train number. - destination (String): The destination of
- * the train. - track (int): The track the train departs from. - delay (LocalTime): The delay of
- * the train, if any.
- *
- * <p>Reasons for Data Types Choices:</p>
- * - departureTime: LocalTime is a good choice because it is naturally represents a time of day
- * without a date. - line: String is suitable for general text. - trainNumber: int is suitable for
- * this number. - destination: String is suitable for general text. - track: int is suitable for
- * this number. - delay: Chose LocalTime so that it is easy to add to the departure time.
- *
- * <p>Immutable Data upon Creation:</p>
- * departureTime, line, trainNumber and destination are immutable upon creation. This is because
- * they won't ever change.
- *
- * <p>Handling Invalid Data </p>
- * - Throwing a NullPointerException if any of the initial parameters are null.
- * - Throwing an IllegalArgumentException if track is not a positive integer.
- * - Throwing a DateTimeException if delay is a negative time.
+ * @author Jonathan Hubertz
+ * @version 1.0.0
+ * @since 30. october 2023
  */
 
 public class TrainDeparture {
@@ -52,7 +33,7 @@ public class TrainDeparture {
    * @throws NullPointerException if any of the parameters are null.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
-      LocalTime delay) {
+      LocalTime delay) throws NullPointerException {
     if (departureTime == null || line == null || destination == null || delay == null) {
       throw new NullPointerException("Null values are not allowed");
     }
@@ -64,12 +45,13 @@ public class TrainDeparture {
     this.delay = delay;
   }
 
+
   // Getter methods
 
   /**
    * Gets the departure time of the train.
    *
-   * @return the departure time.
+   * @return the departure time (LocalTime).
    */
   public LocalTime getDepartureTime() {
     return departureTime;
@@ -78,7 +60,7 @@ public class TrainDeparture {
   /**
    * Gets the line of the train.
    *
-   * @return the line.
+   * @return the line (String).
    */
   public String getLine() {
     return line;
@@ -87,7 +69,7 @@ public class TrainDeparture {
   /**
    * Gets the train number.
    *
-   * @return the train number.
+   * @return the train number (int).
    */
   public int getTrainNumber() {
     return trainNumber;
@@ -96,7 +78,7 @@ public class TrainDeparture {
   /**
    * Gets the destination of the train.
    *
-   * @return the destination.
+   * @return the destination (String).
    */
   public String getDestination() {
     return destination;
@@ -105,7 +87,7 @@ public class TrainDeparture {
   /**
    * Gets the track of the train.
    *
-   * @return the track.
+   * @return the track (int).
    */
   public int getTrack() {
     return track;
@@ -114,7 +96,7 @@ public class TrainDeparture {
   /**
    * Gets the delay of the train.
    *
-   * @return the delay.
+   * @return the delay (LocalTime).
    */
   public LocalTime getDelay() {
     return delay;
@@ -125,10 +107,10 @@ public class TrainDeparture {
   /**
    * Sets the track of the train.
    *
-   * @param track the track.
+   * @param track the track (int).
    * @throws IllegalArgumentException if track is not a positive integer.
    */
-  public void setTrack(int track) {
+  public void setTrack(int track) throws IllegalArgumentException {
     if (track <= 0) {
       throw new IllegalArgumentException("Track must be a positive integer");
     }
@@ -138,11 +120,11 @@ public class TrainDeparture {
   /**
    * Sets the delay of the train.
    *
-   * @param delay the delay.
+   * @param delay the delay (LocalTime).
    * @throws DateTimeException if delay is a negative time.
    */
-  public void setDelay(LocalTime delay) {
-    if (delay.isBefore(LocalTime.of(0, 0)) || delay.equals(LocalTime.of(0, 0)))  {
+  public void setDelay(LocalTime delay) throws DateTimeException {
+    if (delay.isBefore(LocalTime.of(0, 0)) || delay.equals(LocalTime.of(0, 0))) {
       throw new DateTimeException("Delay must be a positive time");
     }
     this.delay = delay;
@@ -153,7 +135,7 @@ public class TrainDeparture {
   /**
    * Gets the departure time with the delay added.
    *
-   * @return the updated departure time.
+   * @return the updated departure time (LocalTime).
    */
   public LocalTime getDepartureTimeWithDelay() {
     return departureTime.plusHours(delay.getHour()).plusMinutes(delay.getMinute());
