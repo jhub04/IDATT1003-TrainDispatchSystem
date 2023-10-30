@@ -30,11 +30,15 @@ public class TrainDeparture {
    * @param destination   the destination. Immutable once initialized.
    * @param delay         the delay. Mutable.
    * @throws NullPointerException if any of the LocalTime parameters are null.
+   * @throws IllegalArgumentException if trainNumber is not a positive integer.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) throws NullPointerException {
     if (departureTime == null || delay == null) {
       throw new NullPointerException("Null values are not allowed");
+    }
+    if (trainNumber <= 0) {
+      throw new IllegalArgumentException("Train number must be a positive integer");
     }
     this.departureTime = departureTime;
     this.line = line;
@@ -54,12 +58,16 @@ public class TrainDeparture {
    * @param track         the track. Mutable.
    * @param delay         the delay. Mutable.
    * @throws NullPointerException if any of the LocalTime parameters are null.
+   * @throws IllegalArgumentException if trainNumber or track is not a positive integer.
    */
 
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       int track, LocalTime delay) {
     if (departureTime == null || delay == null) {
       throw new NullPointerException("Null values are not allowed");
+    }
+    if (trainNumber <= 0 || track <= 0) {
+      throw new IllegalArgumentException("Train number and track must be positive integers");
     }
     this.departureTime = departureTime;
     this.line = line;
