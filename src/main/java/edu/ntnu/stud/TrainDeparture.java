@@ -4,9 +4,8 @@ import java.time.DateTimeException;
 import java.time.LocalTime;
 
 /**
- * Represents a train departure.
- * This class acts as a model for a single train departure. It stores the departure time, line,
- * train number, destination, track and delay of a train
+ * Represents a train departure. This class acts as a model for a single train departure. It stores
+ * the departure time, line, train number, destination, track and delay of a train
  *
  * @author Jonathan Hubertz
  * @version 1.0.0
@@ -23,7 +22,7 @@ public class TrainDeparture {
   private LocalTime delay;
 
   /**
-   * Constructor for TrainDeparture.
+   * Constructor for TrainDeparture without set track.
    *
    * @param departureTime the departure time. Immutable once initialized.
    * @param line          the line. Immutable once initialized.
@@ -34,7 +33,7 @@ public class TrainDeparture {
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) throws NullPointerException {
-    if (departureTime == null || line == null || destination == null || delay == null) {
+    if (departureTime == null || delay == null) {
       throw new NullPointerException("Null values are not allowed");
     }
     this.departureTime = departureTime;
@@ -45,6 +44,29 @@ public class TrainDeparture {
     this.delay = delay;
   }
 
+  /**
+   * Constructor for TrainDeparture with set track.
+   *
+   * @param departureTime the departure time. Immutable once initialized.
+   * @param line          the line. Immutable once initialized.
+   * @param trainNumber   the train number. Immutable once initialized.
+   * @param destination   the destination. Immutable once initialized.
+   * @param track         the track. Mutable.
+   * @param delay         the delay. Mutable.
+   */
+
+  public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
+      int track, LocalTime delay) {
+    if (departureTime == null || delay == null) {
+      throw new NullPointerException("Null values are not allowed");
+    }
+    this.departureTime = departureTime;
+    this.line = line;
+    this.trainNumber = trainNumber;
+    this.destination = destination;
+    this.track = track;
+    this.delay = delay;
+  }
 
   // Getter methods
 
