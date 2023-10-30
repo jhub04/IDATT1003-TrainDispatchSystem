@@ -29,7 +29,7 @@ public class TrainDeparture {
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param delay         the delay. Mutable.
-   * @throws NullPointerException if any of the parameters are null.
+   * @throws NullPointerException if any of the LocalTime parameters are null.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) throws NullPointerException {
@@ -53,6 +53,7 @@ public class TrainDeparture {
    * @param destination   the destination. Immutable once initialized.
    * @param track         the track. Mutable.
    * @param delay         the delay. Mutable.
+   * @throws NullPointerException if any of the LocalTime parameters are null.
    */
 
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
