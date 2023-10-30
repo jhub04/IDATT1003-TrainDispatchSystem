@@ -1,8 +1,10 @@
 # Portfolio project IDATA1003 - 2023
-This file uses Mark Down syntax. For more information see [here](https://www.markdownguide.org/basic-syntax/).
 
-STUDENT NAME = "Your name"  
-STUDENT ID = "Your ID"
+This file uses Mark Down syntax. For more information
+see [here](https://www.markdownguide.org/basic-syntax/).
+
+STUDENT NAME = "Jonathan Skomsøy Hübertz"  
+STUDENT ID = "111753"
 
 ## Project description
 
