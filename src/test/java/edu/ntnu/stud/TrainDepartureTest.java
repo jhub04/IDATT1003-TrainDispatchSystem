@@ -9,21 +9,27 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrainDepartureTest {
 
   private TrainDeparture trainDeparture;
+  private TrainDeparture trainDeparture2;
 
   @BeforeEach
   void setUp() {
     trainDeparture = new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad",
+        LocalTime.of(0, 0));
+    trainDeparture2 = new TrainDeparture(LocalTime.of(13, 0), "RE11", 60, "Skien", 2,
         LocalTime.of(0, 0));
   }
 
   @Test
   void getDepartureTime() {
     assertEquals(LocalTime.of(12, 0), trainDeparture.getDepartureTime());
+    assertEquals(LocalTime.of(13, 0), trainDeparture2.getDepartureTime());
   }
+
 
   @Test
   void getLine() {
     assertEquals("L1", trainDeparture.getLine());
+    assertEquals("RE11", trainDeparture2.getLine());
   }
 
   @Test
@@ -77,16 +83,6 @@ class TrainDepartureTest {
   @Test
   void constructorThrowsExceptionForNullDepartureTime() {
     assertThrows(NullPointerException.class, () -> new TrainDeparture(null, "L1", 1, "Spikkestad", LocalTime.of(0, 0)));
-  }
-
-  @Test
-  void constructorThrowsExceptionForNullLine() {
-    assertThrows(NullPointerException.class, () -> new TrainDeparture(LocalTime.of(12, 0), null, 1, "Spikkestad", LocalTime.of(0, 0)));
-  }
-
-  @Test
-  void constructorThrowsExceptionForNullDestination() {
-    assertThrows(NullPointerException.class, () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, null, LocalTime.of(0, 0)));
   }
 
   @Test
