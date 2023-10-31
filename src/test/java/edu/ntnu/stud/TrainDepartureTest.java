@@ -9,27 +9,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrainDepartureTest {
 
   private TrainDeparture trainDeparture;
-  private TrainDeparture trainDeparture2;
 
   @BeforeEach
   void setUp() {
     trainDeparture = new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad",
-        LocalTime.of(0, 0));
-    trainDeparture2 = new TrainDeparture(LocalTime.of(13, 0), "RE11", 60, "Skien", 2,
         LocalTime.of(0, 0));
   }
 
   @Test
   void getDepartureTime() {
     assertEquals(LocalTime.of(12, 0), trainDeparture.getDepartureTime());
-    assertEquals(LocalTime.of(13, 0), trainDeparture2.getDepartureTime());
   }
 
 
   @Test
   void getLine() {
     assertEquals("L1", trainDeparture.getLine());
-    assertEquals("RE11", trainDeparture2.getLine());
   }
 
   @Test
@@ -54,8 +49,12 @@ class TrainDepartureTest {
 
   @Test
   void setTrack() {
+    TrainDeparture trainDeparture2 = new TrainDeparture(LocalTime.of(13, 0), "RE11", 60, "Skien", 2,
+        LocalTime.of(0, 0));
     trainDeparture.setTrack(1);
+    trainDeparture2.setTrack(4);
     assertEquals(1, trainDeparture.getTrack());
+    assertEquals(4, trainDeparture2.getTrack());
   }
 
   @Test
@@ -82,12 +81,38 @@ class TrainDepartureTest {
 
   @Test
   void constructorThrowsExceptionForNullDepartureTime() {
-    assertThrows(NullPointerException.class, () -> new TrainDeparture(null, "L1", 1, "Spikkestad", LocalTime.of(0, 0)));
+    assertThrows(NullPointerException.class,
+        () -> new TrainDeparture(null, "L1", 1, "Spikkestad", LocalTime.of(0, 0)));
   }
 
   @Test
   void constructorThrowsExceptionForNullDelay() {
-    assertThrows(NullPointerException.class, () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", null));
+    assertThrows(NullPointerException.class,
+        () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", null));
+  }
+
+  @Test
+  void constructorThrowsExceptionForNegTrainNumber() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new TrainDeparture(LocalTime.of(12, 0), "L1", -1, "Spikkestad", LocalTime.of(0, 0)));
+  }
+
+  @Test
+  void constructorThrowsExceptionForZeroTrainNumber() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 0, "Spikkestad", 1, LocalTime.of(0, 0)));
+  }
+
+  @Test
+  void constructorThrowsExceptionForNegTrack() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", -1, LocalTime.of(0, 0)));
+  }
+
+  @Test
+  void constructorThrowsExceptionForZeroTrack() {
+    assertThrows(IllegalArgumentException.class,
+        () -> new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", 0, LocalTime.of(0, 0)));
   }
 
   @Test
