@@ -15,7 +15,8 @@ class TrainDepartureTest {
 
   @BeforeEach
   void setUp() {
-    trainDeparture = new TrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", LocalTime.of(0, 0));
+    LocalTime departureTime = LocalTime.of(12, 0);
+    trainDeparture = new TrainDeparture(departureTime, "L1", 1, "Spikkestad", LocalTime.of(0, 0));
   }
 
   @Test
