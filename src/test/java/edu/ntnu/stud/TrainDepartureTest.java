@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -19,43 +20,48 @@ class TrainDepartureTest {
     trainDeparture = new TrainDeparture(departureTime, "L1", 1, "Spikkestad", LocalTime.of(0, 0));
   }
 
-  @Test
-  void getDepartureTime() {
-    assertEquals(LocalTime.of(12, 0), trainDeparture.getDepartureTime());
-  }
+  @Nested
+  @DisplayName("Tests for the getters")
+  class GettersTests {
+    @Test
+    void getDepartureTime() {
+      assertEquals(LocalTime.of(12, 0), trainDeparture.getDepartureTime());
+    }
 
-  @Test
-  void getLine() {
-    assertEquals("L1", trainDeparture.getLine());
-  }
+    @Test
+    void getLine() {
+      assertEquals("L1", trainDeparture.getLine());
+    }
 
-  @Test
-  void getTrainNumber() {
-    assertEquals(1, trainDeparture.getTrainNumber());
-  }
+    @Test
+    void getTrainNumber() {
+      assertEquals(1, trainDeparture.getTrainNumber());
+    }
 
-  @Test
-  void getDestination() {
-    assertEquals("Spikkestad", trainDeparture.getDestination());
-  }
+    @Test
+    void getDestination() {
+      assertEquals("Spikkestad", trainDeparture.getDestination());
+    }
 
-  @Test
-  void getTrack() {
-    assertEquals(-1, trainDeparture.getTrack());
-  }
+    @Test
+    void getTrack() {
+      assertEquals(-1, trainDeparture.getTrack());
+    }
 
-  @Test
-  void getDelay() {
-    assertEquals(LocalTime.of(0, 0), trainDeparture.getDelay());
-  }
+    @Test
+    void getDelay() {
+      assertEquals(LocalTime.of(0, 0), trainDeparture.getDelay());
+    }
 
-  @Test
-  void testToString() {
-    String expected = "---TrainDeparture---\n[departureTime=12:00, line=L1, trainNumber=1, destination=Spikkestad, track=-1, delay=00:00]";
-    assertEquals(expected, trainDeparture.toString());
+    @Test
+    void testToString() {
+      String expected = "---TrainDeparture---\n[departureTime=12:00, line=L1, trainNumber=1, destination=Spikkestad, track=-1, delay=00:00]";
+      assertEquals(expected, trainDeparture.toString());
+    }
   }
 
   @Nested
+  @DisplayName("Tests for the setTrack method")
   class TrackTests {
 
     @Test
@@ -71,6 +77,7 @@ class TrainDepartureTest {
   }
 
   @Nested
+  @DisplayName("Tests for the setDelay method")
   class DelayTests {
 
     @Test
@@ -103,6 +110,7 @@ class TrainDepartureTest {
   }
 
   @Nested
+  @DisplayName("Tests for the constructors")
   class ConstructorTests {
 
     @Test
