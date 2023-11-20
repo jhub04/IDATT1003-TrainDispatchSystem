@@ -98,11 +98,6 @@ class TrainDepartureTest {
     }
 
     @Test
-    void setDelayThrowsExceptionForNegativeTime() {
-      assertThrows(DateTimeException.class, () -> trainDeparture.setDelay(LocalTime.of(0, -1)));
-    }
-
-    @Test
     void getDepartureTimeWithDelay() {
       trainDeparture.setDelay(LocalTime.of(0, 1));
       assertEquals(LocalTime.of(12, 1), trainDeparture.getDepartureTimeWithDelay());
