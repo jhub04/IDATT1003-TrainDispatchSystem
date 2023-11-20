@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 
 /**
@@ -38,13 +36,10 @@ public class TrainDepartureRegister {
    */
   public boolean addTrainDeparture(TrainDeparture departure) {
     int trainNumber = departure.getTrainNumber();
-    if (!(registerMap.containsKey(trainNumber))) {
-      registerMap.put(trainNumber, departure);
+    return registerMap.computeIfAbsent(trainNumber, k -> {
       registerList.add(departure);
-      return true;
-    }
-
-    return false;
+      return departure;
+    }) == departure;
 
   }
 
@@ -67,7 +62,7 @@ public class TrainDepartureRegister {
   public List<TrainDeparture> searchByDestination(String destination) {
     return registerList.stream()
         .filter(departure -> departure.getDestination().equals(destination))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   /**
@@ -89,7 +84,7 @@ public class TrainDepartureRegister {
   public List<TrainDeparture> getSortedDepartures() {
     return registerList.stream()
         .sorted(Comparator.comparing(TrainDeparture::getDepartureTime))
-        .collect(Collectors.toList());
+        .toList();
   }
 
 
