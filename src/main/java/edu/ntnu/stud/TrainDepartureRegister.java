@@ -103,5 +103,33 @@ public class TrainDepartureRegister {
     return temp;
   }
 
+  /**
+   * This method returns a string representation of the register.
+   */
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+
+    // Header
+    sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "Nr", "Departure Time", "Destination", "Track", "Delay"));
+
+    // Separator
+    sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "----", "---------------", "------------------", "-----", "-----"));
+
+    // Data rows
+    for (TrainDeparture departure : register.values()) {
+      sb.append(String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
+          departure.getTrainNumber(),
+          departure.getDepartureTime(),
+          departure.getDestination(),
+          departure.getTrack(),
+          departure.getDelay()));
+    }
+
+    return sb.toString();
+  }
+
 
 }

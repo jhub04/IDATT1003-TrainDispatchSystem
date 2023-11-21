@@ -29,7 +29,7 @@ public class TrainDeparture {
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param delay         the delay. Mutable.
-   * @throws NullPointerException if any of the LocalTime parameters are null.
+   * @throws NullPointerException     if any of the LocalTime parameters are null.
    * @throws IllegalArgumentException if trainNumber is not a positive integer.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
@@ -57,7 +57,7 @@ public class TrainDeparture {
    * @param destination   the destination. Immutable once initialized.
    * @param track         the track. Mutable.
    * @param delay         the delay. Mutable.
-   * @throws NullPointerException if any of the LocalTime parameters are null.
+   * @throws NullPointerException     if any of the LocalTime parameters are null.
    * @throws IllegalArgumentException if trainNumber or track is not a positive integer.
    */
 
@@ -179,9 +179,8 @@ public class TrainDeparture {
    */
   @Override
   public String toString() {
-    return "---TrainDeparture---\n[departureTime=" + departureTime + ", line=" + line
-        + ", trainNumber=" + trainNumber + ", destination=" + destination + ", track=" + track
-        + ", delay=" + delay + "]";
+    return trainNumber + "   " + departureTime + "   " + line + " " + destination + "   " + track
+        + "   " + delay;
   }
 
 }
