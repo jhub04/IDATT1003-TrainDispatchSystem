@@ -123,7 +123,7 @@ public class TrainDepartureRegister {
       sb.append(String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
           departure.getTrainNumber(),
           departure.getDepartureTime(),
-          departure.getDestination(),
+          departure.getLine() + " " + departure.getDestination(),
           departure.getTrack(),
           departure.getDelay()));
     }
