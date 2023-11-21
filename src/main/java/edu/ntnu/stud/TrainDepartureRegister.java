@@ -16,15 +16,13 @@ import java.util.List;
  */
 public class TrainDepartureRegister {
 
-  private final HashMap<Integer, TrainDeparture> registerMap;
-  private final ArrayList<TrainDeparture> registerList;
+  private final HashMap<Integer, TrainDeparture> register;
 
   /**
    * Constructor for TrainDepartureRegister.
    */
   public TrainDepartureRegister() {
-    this.registerMap = new HashMap<>();
-    this.registerList = new ArrayList<>();
+    this.register = new HashMap<>();
   }
 
 
@@ -36,11 +34,11 @@ public class TrainDepartureRegister {
    */
   public boolean addTrainDeparture(TrainDeparture departure) {
     int trainNumber = departure.getTrainNumber();
-    return registerMap.computeIfAbsent(trainNumber, k -> {
-      registerList.add(departure);
-      return departure;
-    }) == departure;
-
+    if (register.containsKey(trainNumber)) {
+      return false;
+    }
+    register.put(trainNumber, departure);
+    return true;
   }
 
   /**
@@ -50,7 +48,7 @@ public class TrainDepartureRegister {
    * @return the train departure with the given train number, or null if it does not exist.
    */
   public TrainDeparture searchByTrainNumber(int trainNumber) {
-    return registerMap.get(trainNumber);
+    return register.get(trainNumber);
   }
 
   /**
@@ -60,7 +58,7 @@ public class TrainDepartureRegister {
    * @return a list of train departures with the given destination, or an empty list if none exist.
    */
   public List<TrainDeparture> searchByDestination(String destination) {
-    return registerList.stream()
+    return register.values().stream()
         .filter(departure -> departure.getDestination().equals(destination))
         .toList();
   }
@@ -71,9 +69,7 @@ public class TrainDepartureRegister {
    * @param time the time to remove train departures before.
    */
   public void removeDeparturesBefore(LocalTime time) {
-    registerList.removeIf(departure -> departure.getDepartureTimeWithDelay().isBefore(time));
-    registerMap.entrySet()
-        .removeIf(entry -> entry.getValue().getDepartureTimeWithDelay().isBefore(time));
+    register.entrySet().removeIf(entry -> entry.getValue().getDepartureTimeWithDelay().isBefore(time));
   }
 
   /**
@@ -82,9 +78,11 @@ public class TrainDepartureRegister {
    * @return a sorted list of train departures by the departure time.
    */
   public List<TrainDeparture> getSortedDepartures() {
-    return registerList.stream()
-        .sorted(Comparator.comparing(TrainDeparture::getDepartureTime))
-        .toList();
+    List<TrainDeparture> temp = new ArrayList<>();
+    register.values().stream()
+        .sorted(Comparator.comparing(TrainDeparture::getDepartureTimeWithDelay))
+        .forEach(temp::add);
+    return temp;
   }
 
 
