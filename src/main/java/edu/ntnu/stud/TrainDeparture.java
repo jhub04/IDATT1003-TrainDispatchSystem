@@ -8,7 +8,7 @@ import java.time.LocalTime;
  * the departure time, line, train number, destination, track and delay of a train
  *
  * @author Jonathan Hubertz
- * @version 1.0.0
+ * @version 0.8
  * @since 30. october 2023
  */
 

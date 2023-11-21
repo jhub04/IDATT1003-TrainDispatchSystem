@@ -2,6 +2,10 @@ package edu.ntnu.stud;
 
 /**
  * This is the main class for the train dispatch application.
+ *
+ * @author Jonathan Hübertz
+ * @version 0.1
+ * @since 21. november 2023
  */
 public class TrainDispatchApp {
 

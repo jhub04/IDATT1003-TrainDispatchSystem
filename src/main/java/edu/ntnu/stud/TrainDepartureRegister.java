@@ -11,7 +11,7 @@ import java.util.List;
  * This class represents a register of train departures.
  *
  * @author Jonathan Hubertz
- * @version 1.1.0
+ * @version 0.4
  * @since 30. october 2023
  */
 public class TrainDepartureRegister {

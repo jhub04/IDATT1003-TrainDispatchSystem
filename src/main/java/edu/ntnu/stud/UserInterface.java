@@ -4,6 +4,10 @@ import java.time.LocalTime;
 
 /**
  * This is the user inteface class for the train dispatch application.
+ *
+ * @author Jonathan Hübertz
+ * @version 0.1
+ * @since 21. november 2023
  */
 public class UserInterface {
 
