@@ -25,20 +25,37 @@ public class TrainDepartureRegister {
     this.register = new HashMap<>();
   }
 
+  /**
+   * This method adds a train departure without a set track to the register.
+   *
+   * @param departureTime the departure time
+   * @param line          the line
+   * @param trainNumber   the train number
+   * @param destination   the destination
+   * @param delay         the delay
+   * @return true if the train departure was added, false if it was not added.
+   */
+  public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
+      String destination, LocalTime delay) {
+    return register.putIfAbsent(trainNumber,
+        new TrainDeparture(departureTime, line, trainNumber, destination, delay)) == null;
+  }
 
   /**
-   * This method adds a train departure to the register.
+   * This method adds a train departure with a set track to the register.
    *
-   * @param departure the train departure to be added.
-   * @return true if the train departure was added, false if not.
+   * @param departureTime the departure time
+   * @param line          the line
+   * @param trainNumber   the train number
+   * @param destination   the destination
+   * @param track         the track
+   * @param delay         the delay
+   * @return true if the train departure was added, false if it was not added.
    */
-  public boolean addTrainDeparture(TrainDeparture departure) {
-    int trainNumber = departure.getTrainNumber();
-    if (register.containsKey(trainNumber)) {
-      return false;
-    }
-    register.put(trainNumber, departure);
-    return true;
+  public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
+      String destination, int track, LocalTime delay) {
+    return register.putIfAbsent(trainNumber,
+        new TrainDeparture(departureTime, line, trainNumber, destination, track, delay)) == null;
   }
 
   /**
@@ -69,7 +86,8 @@ public class TrainDepartureRegister {
    * @param time the time to remove train departures before.
    */
   public void removeDeparturesBefore(LocalTime time) {
-    register.entrySet().removeIf(entry -> entry.getValue().getDepartureTimeWithDelay().isBefore(time));
+    register.entrySet()
+        .removeIf(entry -> entry.getValue().getDepartureTimeWithDelay().isBefore(time));
   }
 
   /**
