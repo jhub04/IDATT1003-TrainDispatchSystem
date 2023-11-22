@@ -104,8 +104,20 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * This method returns a string representation of the register.
+   * The number of departures in the register.
+   *
+   * @return the number of departures in the register.
    */
+  public int getNumberOfDepartures() {
+    return register.size();
+  }
+
+  /**
+   * A string representation of the register.
+   *
+   * @return a string representation of the register.
+   */
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
