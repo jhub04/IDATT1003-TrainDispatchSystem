@@ -108,7 +108,6 @@ public class TrainDepartureRegisterTest {
       void shouldNotRemoveTrainDepartureIfExactTime() {
         register.removeDeparturesBefore(LocalTime.of(16, 0));
         assertEquals(2, register.getNumberOfDepartures());
-        System.out.println(register.toString());
       }
 
 

@@ -33,7 +33,8 @@ public class TrainDepartureRegister {
    * @param trainNumber   the train number
    * @param destination   the destination
    * @param delay         the delay
-   * @return true if the train departure was added, false if it was not added.
+   * @return true if the train departure was added, false if a trainDeparture with the same
+   *        trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
@@ -50,7 +51,8 @@ public class TrainDepartureRegister {
    * @param destination   the destination
    * @param track         the track
    * @param delay         the delay
-   * @return true if the train departure was added, false if it was not added.
+   * @return true if the train departure was added, false if a trainDeparture with the same
+   *        trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
