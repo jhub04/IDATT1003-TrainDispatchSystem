@@ -162,14 +162,14 @@ public class TrainDepartureRegisterTest {
       }
 
       @Test
-        void shouldSortTrainDeparturesByAscendingOrderWithDelay() {
-          assertEquals(LocalTime.of(15, 5),
-                register.getSortedDepartures().get(0).getDepartureTimeWithDelay());
-          assertEquals(LocalTime.of(16, 0),
-                register.getSortedDepartures().get(1).getDepartureTimeWithDelay());
-          assertEquals(LocalTime.of(16, 15),
-                register.getSortedDepartures().get(2).getDepartureTimeWithDelay());
-        }
+      void shouldSortTrainDeparturesByAscendingOrderWithDelay() {
+        assertEquals(LocalTime.of(15, 5),
+            register.getSortedDepartures().get(0).getDepartureTimeWithDelay());
+        assertEquals(LocalTime.of(16, 0),
+            register.getSortedDepartures().get(1).getDepartureTimeWithDelay());
+        assertEquals(LocalTime.of(16, 15),
+            register.getSortedDepartures().get(2).getDepartureTimeWithDelay());
+      }
     }
   }
 }
