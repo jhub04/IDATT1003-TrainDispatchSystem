@@ -3,7 +3,7 @@ package edu.ntnu.stud;
 import java.time.LocalTime;
 
 /**
- * This is the user inteface class for the train dispatch application.
+ * This is the user interface class for the train dispatch application.
  *
  * @author Jonathan Hübertz
  * @version 0.1
@@ -13,13 +13,11 @@ public class UserInterface {
 
   private final TrainDepartureRegister register;
 
-
   /**
    * Constructor for UserInterface.
    */
   public UserInterface() {
     this.register = new TrainDepartureRegister();
-
   }
 
   /**

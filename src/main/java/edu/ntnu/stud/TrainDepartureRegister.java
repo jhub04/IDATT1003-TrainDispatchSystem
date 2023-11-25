@@ -132,7 +132,7 @@ public class TrainDepartureRegister {
     sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
         "----", "---------------", "------------------", "-----", "-----"));
 
-    // Data rows
+
     for (TrainDeparture departure : register.values()) {
       sb.append(String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
           departure.getTrainNumber(),
