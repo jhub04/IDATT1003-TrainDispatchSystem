@@ -34,7 +34,7 @@ public class TrainDepartureRegister {
    * @param destination   the destination
    * @param delay         the delay
    * @return true if the train departure was added, false if a trainDeparture with the same
-   *        trainNumber already exists.
+   * trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
@@ -52,12 +52,32 @@ public class TrainDepartureRegister {
    * @param track         the track
    * @param delay         the delay
    * @return true if the train departure was added, false if a trainDeparture with the same
-   *        trainNumber already exists.
+   * trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
     return register.putIfAbsent(trainNumber,
         new TrainDeparture(departureTime, line, trainNumber, destination, track, delay)) == null;
+  }
+
+  /**
+   * This method sets the track of a train departure.
+   *
+   * @param trainNumber the train number
+   * @param track       the track
+   */
+  public void setTrack(int trainNumber, int track) {
+    register.get(trainNumber).setTrack(track);
+  }
+
+  /**
+   * This method sets the delay of a train departure.
+   *
+   * @param trainNumber the train number
+   * @param delay       the delay
+   */
+  public void setDelay(int trainNumber, LocalTime delay) {
+    register.get(trainNumber).setDelay(delay);
   }
 
   /**
@@ -131,7 +151,6 @@ public class TrainDepartureRegister {
     // Separator
     sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
         "----", "---------------", "------------------", "-----", "-----"));
-
 
     for (TrainDeparture departure : register.values()) {
       sb.append(String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
