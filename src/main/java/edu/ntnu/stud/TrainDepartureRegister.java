@@ -17,12 +17,14 @@ import java.util.List;
 public class TrainDepartureRegister {
 
   private final HashMap<Integer, TrainDeparture> register;
+  private LocalTime systemTime;
 
   /**
    * Constructor for TrainDepartureRegister.
    */
   public TrainDepartureRegister() {
     this.register = new HashMap<>();
+    this.systemTime = LocalTime.now();
   }
 
   /**
@@ -34,7 +36,7 @@ public class TrainDepartureRegister {
    * @param destination   the destination
    * @param delay         the delay
    * @return true if the train departure was added, false if a trainDeparture with the same
-   * trainNumber already exists.
+   *         trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
@@ -52,12 +54,29 @@ public class TrainDepartureRegister {
    * @param track         the track
    * @param delay         the delay
    * @return true if the train departure was added, false if a trainDeparture with the same
-   * trainNumber already exists.
+   *        trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
     return register.putIfAbsent(trainNumber,
         new TrainDeparture(departureTime, line, trainNumber, destination, track, delay)) == null;
+  }
+
+  /**
+   * Gets the system time.
+   *
+   * @return the system time
+   */
+
+  public LocalTime getSystemTime() {
+    return systemTime;
+  }
+
+  /**
+   * Sets the system time.
+   */
+  public void setSystemTime(LocalTime time) {
+    systemTime = time;
   }
 
   /**
