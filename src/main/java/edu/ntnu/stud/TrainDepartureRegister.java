@@ -24,7 +24,7 @@ public class TrainDepartureRegister {
    */
   public TrainDepartureRegister() {
     this.register = new HashMap<>();
-    this.systemTime = LocalTime.now();
+    this.systemTime = LocalTime.of(12, 0);
   }
 
   /**
@@ -36,7 +36,7 @@ public class TrainDepartureRegister {
    * @param destination   the destination
    * @param delay         the delay
    * @return true if the train departure was added, false if a trainDeparture with the same
-   *         trainNumber already exists.
+   * trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
@@ -54,7 +54,7 @@ public class TrainDepartureRegister {
    * @param track         the track
    * @param delay         the delay
    * @return true if the train departure was added, false if a trainDeparture with the same
-   *        trainNumber already exists.
+   * trainNumber already exists.
    */
   public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
@@ -74,9 +74,18 @@ public class TrainDepartureRegister {
 
   /**
    * Sets the system time.
+   *
+   * @param time the time to set
+   * @return true if the time was set, false if the time is before the current system time.
    */
-  public void setSystemTime(LocalTime time) {
-    systemTime = time;
+  public boolean setSystemTime(LocalTime time) {
+    if (time.isBefore(systemTime)) {
+      return false;
+    } else {
+      systemTime = time;
+    }
+    return true;
+
   }
 
   /**
