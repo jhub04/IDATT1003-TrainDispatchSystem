@@ -179,23 +179,13 @@ public class TrainDeparture {
    */
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
 
-    // Header
-    sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "Nr", "Departure Time", "Destination", "Track", "Delay"));
-
-    // Separator
-    sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "----", "---------------", "------------------", "-----", "-----"));
-
-    sb.append(String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
+    return String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
         this.getTrainNumber(),
         this.getDepartureTime(),
         this.getLine() + " " + this.getDestination(),
         this.getTrack(),
-        this.getDelay()));
-    return sb.toString();
+        this.getDelay());
   }
 
 }
