@@ -29,7 +29,8 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * Adds a new departure to the correct place in the register, depending on the departureTime
+   * Sorts and adds a departure to the correct place in the register, according to the
+   * departureTime.
    *
    * @param departure the TrainDeparture that's to be added
    * @return true if the TrainDeparture was added correctly
@@ -197,6 +198,58 @@ public class TrainDepartureRegister {
     return register.size();
   }
 
+
+  /**
+   * The formatting of the header and separator of.
+   *
+   * @return the header and separator.
+   */
+  private String formatDepartures() {
+    String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "Nr", "Departure Time", "Destination", "Track", "Delay");
+    String separator = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "----", "---------------", "------------------", "-----", "-----");
+    return header + separator;
+  }
+
+  /**
+   * A string representation of a train departure with the given train number.
+   * @param trainNumber the train number
+   * @return a string representation of a train departure with the given train number.
+   */
+  public String searchByTrainNumberString(int trainNumber) {
+    TrainDeparture departure = searchByTrainNumber(trainNumber);
+    if (departure == null) {
+      return "No train departures with train number " + trainNumber + " found.";
+    } else {
+      return formatDepartures() + departure;
+    }
+  }
+
+  /**
+   * A string representation of train departures with the given destination.
+   * @param destination the destination
+   * @return a string representation of train departures with the given destination.
+   */
+  public String searchByDestinationString(String destination) {
+    List<TrainDeparture> departures = searchByDestination(destination);
+    if (departures.isEmpty()) {
+      return "No train departures with destination " + destination + " found.";
+    } else {
+      String newDepartures = departures.stream()
+          .map(departure -> String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
+              departure.getTrainNumber(),
+              departure.getDepartureTime(),
+              departure.getLine() + " " + departure.getDestination(),
+              departure.getTrack(),
+              departure.getDelay()))
+          .collect(Collectors.joining());
+
+      return formatDepartures() + newDepartures;
+    }
+  }
+
+
   /**
    * A string representation of the register.
    *
@@ -205,11 +258,6 @@ public class TrainDepartureRegister {
 
   @Override
   public String toString() {
-    String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "Nr", "Departure Time", "Destination", "Track", "Delay");
-    String separator = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "----", "---------------", "------------------", "-----", "-----");
-
     String departures = register.stream()
         .map(departure -> String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
             departure.getTrainNumber(),
@@ -219,7 +267,7 @@ public class TrainDepartureRegister {
             departure.getDelay()))
         .collect(Collectors.joining());
 
-    return header + separator + departures;
+    return formatDepartures() + departures;
   }
 
 
