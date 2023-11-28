@@ -71,7 +71,6 @@ public class TrainDepartureRegister {
   public LocalTime getSystemTime() {
     return systemTime;
   }
-
   /**
    * Sets the system time.
    *
@@ -82,6 +81,7 @@ public class TrainDepartureRegister {
     if (time.isBefore(systemTime)) {
       return false;
     } else {
+      removeDeparturesBefore(time);
       systemTime = time;
     }
     return true;
