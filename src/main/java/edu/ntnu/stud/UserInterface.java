@@ -103,7 +103,7 @@ public class UserInterface {
   public void searchByTrainNumber() {
     System.out.println("Enter train number: ");
     int trainNumber = input.nextInt();
-    System.out.println(register.searchByTrainNumber(trainNumber));
+    System.out.println(register.searchByTrainNumberString(trainNumber));
 
   }
 
@@ -114,7 +114,7 @@ public class UserInterface {
   public void searchByDestination() {
     System.out.println("Enter destination: ");
     String destination = input.nextLine();
-    System.out.println(register.searchByDestination(destination));
+    System.out.println(register.searchByDestinationString(destination));
 
   }
 
