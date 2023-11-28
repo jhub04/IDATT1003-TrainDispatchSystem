@@ -179,12 +179,12 @@ public class TrainDeparture {
    */
   @Override
   public String toString() {
-
-    return String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
+    String trackStr = this.getTrack() == -1 ? "    " : String.format("%-5d", this.getTrack());
+    return String.format("%-4d | %-15s | %-18s | %-5s | %-5s%n",
         this.getTrainNumber(),
         this.getDepartureTime(),
         this.getLine() + " " + this.getDestination(),
-        this.getTrack(),
+        trackStr,
         this.getDelay());
   }
 

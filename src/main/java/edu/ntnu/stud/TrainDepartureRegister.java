@@ -237,12 +237,7 @@ public class TrainDepartureRegister {
       return "No train departures with destination " + destination + " found.";
     } else {
       String newDepartures = departures.stream()
-          .map(departure -> String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
-              departure.getTrainNumber(),
-              departure.getDepartureTime(),
-              departure.getLine() + " " + departure.getDestination(),
-              departure.getTrack(),
-              departure.getDelay()))
+          .map(TrainDeparture::toString)
           .collect(Collectors.joining());
 
       return formatDepartures() + newDepartures;
@@ -258,16 +253,11 @@ public class TrainDepartureRegister {
 
   @Override
   public String toString() {
-    String departures = register.stream()
-        .map(departure -> String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
-            departure.getTrainNumber(),
-            departure.getDepartureTime(),
-            departure.getLine() + " " + departure.getDestination(),
-            departure.getTrack(),
-            departure.getDelay()))
+    String newDepartures = register.stream()
+        .map(TrainDeparture::toString)
         .collect(Collectors.joining());
 
-    return formatDepartures() + departures;
+    return formatDepartures() + newDepartures;
   }
 
 
