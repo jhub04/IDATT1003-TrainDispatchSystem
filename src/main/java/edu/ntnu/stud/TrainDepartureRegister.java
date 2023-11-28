@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -123,7 +124,11 @@ public class TrainDepartureRegister {
    * @param track       the track
    */
   public void setTrack(int trainNumber, int track) {
-    register.get(trainNumber).setTrack(track);
+    register.forEach(departure -> {
+      if (departure.getTrainNumber() == trainNumber) {
+        departure.setTrack(track);
+      }
+    });
   }
 
   /**
@@ -133,7 +138,11 @@ public class TrainDepartureRegister {
    * @param delay       the delay
    */
   public void setDelay(int trainNumber, LocalTime delay) {
-    register.get(trainNumber).setDelay(delay);
+    register.forEach(departure -> {
+      if (departure.getTrainNumber() == trainNumber) {
+        departure.setDelay(delay);
+      }
+    });
   }
 
   /**
@@ -143,12 +152,10 @@ public class TrainDepartureRegister {
    * @return the train departure with the given train number, or null if it does not exist.
    */
   public TrainDeparture searchByTrainNumber(int trainNumber) {
-    for (TrainDeparture departure : register) {
-      if (departure.getTrainNumber() == trainNumber) {
-        return departure;
-      }
-    }
-    return null;
+    return register.stream()
+        .filter(departure -> departure.getTrainNumber() == trainNumber)
+        .findFirst()
+        .orElse(null);
   }
 
   /**
@@ -198,26 +205,21 @@ public class TrainDepartureRegister {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
+    String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "Nr", "Departure Time", "Destination", "Track", "Delay");
+    String separator = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "----", "---------------", "------------------", "-----", "-----");
 
-    // Header
-    sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "Nr", "Departure Time", "Destination", "Track", "Delay"));
+    String departures = register.stream()
+        .map(departure -> String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
+            departure.getTrainNumber(),
+            departure.getDepartureTime(),
+            departure.getLine() + " " + departure.getDestination(),
+            departure.getTrack(),
+            departure.getDelay()))
+        .collect(Collectors.joining());
 
-    // Separator
-    sb.append(String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "----", "---------------", "------------------", "-----", "-----"));
-
-    for (TrainDeparture departure : getDepartures()) {
-      sb.append(String.format("%-4d | %-15s | %-18s | %-5d | %-5s%n",
-          departure.getTrainNumber(),
-          departure.getDepartureTime(),
-          departure.getLine() + " " + departure.getDestination(),
-          departure.getTrack(),
-          departure.getDelay()));
-    }
-
-    return sb.toString();
+    return header + separator + departures;
   }
 
 
