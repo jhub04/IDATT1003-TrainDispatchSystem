@@ -59,6 +59,22 @@ public class TrainDepartureRegisterTest {
     }
 
     @Nested
+    @DisplayName("Tests for setTrack")
+    class setTrackTest {
+
+      @Test
+      void shouldSetTrack() {
+        register.setTrack(1, 3);
+        assertEquals(3, register.searchByTrainNumber(1).getTrack());
+      }
+
+      @Test
+      void shouldNotSetTrack() {
+        assertThrows(IllegalArgumentException.class, () -> register.setTrack(1, -3));
+      }
+    }
+
+    @Nested
     @DisplayName("Tests for searchByTrainNumber")
     class searchByTrainNumberTest {
 
@@ -137,37 +153,37 @@ public class TrainDepartureRegisterTest {
     }
 
     @Nested
-    @DisplayName("Tests for getSortedDepartures")
+    @DisplayName("Tests for getDepartures")
     class getSortedDeparturesTest {
 
       @Test
       void shouldSortTrainDeparturesByAscendingOrder() {
         assertEquals(LocalTime.of(15, 5),
-            register.getSortedDepartures().get(0).getDepartureTime());
+            register.getDepartures().get(0).getDepartureTime());
         assertEquals(LocalTime.of(16, 0),
-            register.getSortedDepartures().get(1).getDepartureTime());
+            register.getDepartures().get(1).getDepartureTime());
         assertEquals(LocalTime.of(16, 10),
-            register.getSortedDepartures().get(2).getDepartureTime());
+            register.getDepartures().get(2).getDepartureTime());
       }
 
       @Test
       void shouldNotSortTrainDeparturesByDescendingOrder() {
         assertNotEquals(LocalTime.of(16, 10),
-            register.getSortedDepartures().get(1).getDepartureTime());
+            register.getDepartures().get(1).getDepartureTime());
         assertNotEquals(LocalTime.of(16, 0),
-            register.getSortedDepartures().get(0).getDepartureTime());
+            register.getDepartures().get(0).getDepartureTime());
         assertNotEquals(LocalTime.of(15, 5),
-            register.getSortedDepartures().get(2).getDepartureTime());
+            register.getDepartures().get(2).getDepartureTime());
       }
 
       @Test
       void shouldSortTrainDeparturesByAscendingOrderWithDelay() {
         assertEquals(LocalTime.of(15, 5),
-            register.getSortedDepartures().get(0).getDepartureTimeWithDelay());
+            register.getDepartures().get(0).getDepartureTimeWithDelay());
         assertEquals(LocalTime.of(16, 0),
-            register.getSortedDepartures().get(1).getDepartureTimeWithDelay());
+            register.getDepartures().get(1).getDepartureTimeWithDelay());
         assertEquals(LocalTime.of(16, 15),
-            register.getSortedDepartures().get(2).getDepartureTimeWithDelay());
+            register.getDepartures().get(2).getDepartureTimeWithDelay());
       }
     }
   }
