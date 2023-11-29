@@ -55,18 +55,18 @@ public class TrainDepartureRegister {
    * @param trainNumber   the train number
    * @param destination   the destination
    * @param delay         the delay
-   * @return true if the train departure was added, false if a trainDeparture with the same
-   * trainNumber already exists.
    */
 
-  public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
+  public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
-    if (searchByTrainNumber(trainNumber) != null) {
-      return false;
+    try {
+      TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
+          destination, delay);
+      sorted(newDeparture);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
-    TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber, destination,
-        delay);
-    return sorted(newDeparture);
+
   }
 
   /**
@@ -78,17 +78,16 @@ public class TrainDepartureRegister {
    * @param destination   the destination
    * @param track         the track
    * @param delay         the delay
-   * @return true if the train departure was added, false if a trainDeparture with the same
-   * trainNumber already exists.
    */
-  public boolean addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
+  public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
-    if (searchByTrainNumber(trainNumber) != null) {
-      return false;
+    try {
+      TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
+          destination, delay);
+      sorted(newDeparture);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
-    TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber, destination,
-        track, delay);
-    return sorted(newDeparture);
   }
 
   /**
@@ -214,7 +213,7 @@ public class TrainDepartureRegister {
 
 
   /**
-   * The formatting of the header and separator of.
+   * The formatting of the header and separator of the string representations.
    *
    * @return the header and separator.
    */

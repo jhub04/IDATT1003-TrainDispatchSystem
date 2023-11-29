@@ -3,6 +3,7 @@ package edu.ntnu.stud;
 import java.time.LocalTime;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * This is the user interface class for the train dispatch application.
@@ -36,37 +37,110 @@ public class UserInterface {
    * Adds a train departure to the register.
    */
   public void addDeparture() {
-    System.out.println("Enter departure time (hh:mm): ");
-    String departureTimeString = input.nextLine();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-    LocalTime departureTime = LocalTime.parse(departureTimeString, formatter);
 
-    System.out.println("Enter line: ");
-    String line = input.nextLine();
+    LocalTime departureTime = collectTime("Enter departure time (hh:mm): ", formatter);
 
-    System.out.println("Enter train number: ");
-    int trainNumber = input.nextInt();
-    input.nextLine();
+    // Validate departure time
+    if (departureTime.isBefore(register.getSystemTime())) {
+      System.out.println("Error: Cannot assign a train departure time before the current time.");
+      return;
+    }
 
-    System.out.println("Enter destination: ");
-    String destination = input.nextLine();
+    String line = collectString("Enter line: ");
+    int trainNumber = collectPositiveInt("Enter train number: ");
 
-    System.out.println("Enter track (-1 if unknown): ");
-    int track = input.nextInt();
-    input.nextLine();
+    // Validate train number
+    if (register.searchByTrainNumber(trainNumber) != null) {
+      System.out.println("Error: A train with number " + trainNumber + " already exists.");
+      return;
+    }
 
-    System.out.println("Enter delay (hh:mm): ");
-    String delayString = input.nextLine();
-    LocalTime delay = LocalTime.parse(delayString, formatter);
+    String destination = collectString("Enter destination: ");
+    int track = collectOptionalInt("Enter track (optional): ");
+    LocalTime delay = collectTime("Enter delay (hh:mm): ", formatter);
 
-    if (track == -1) {
-      register.addTrainDeparture(departureTime, line, trainNumber, destination,
-          delay);
-    } else {
-      register.addTrainDeparture(departureTime, line, trainNumber, destination, track,
-          delay);
+    // Add the train departure
+    try {
+      register.addTrainDeparture(departureTime, line, trainNumber, destination, track, delay);
+      System.out.println("Train departure successfully added.");
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
     }
   }
+
+  /**
+   * This method collects a time from the user.
+   * @param prompt the prompt to display to the user
+   * @param formatter the formatter to use for parsing the time
+   * @return the time collected from the user
+   */
+  private LocalTime collectTime(String prompt, DateTimeFormatter formatter) {
+    while (true) {
+      try {
+        System.out.println(prompt);
+        return LocalTime.parse(input.nextLine(), formatter);
+      } catch (DateTimeParseException e) {
+        System.out.println("Invalid time format. Please try again.");
+      }
+    }
+  }
+
+  /**
+   * This method collects a string from the user.
+   * @param prompt the prompt to display to the user
+   * @return the string collected from the user
+   */
+  private String collectString(String prompt) {
+    while (true) {
+      System.out.println(prompt);
+      String inputString = input.nextLine();
+      if (!inputString.trim().isEmpty()) {
+        return inputString;
+      }
+      System.out.println("Input cannot be empty. Please try again.");
+    }
+  }
+
+  /**
+   * This method collects a positive integer from the user.
+   * @param prompt the prompt to display to the user
+   * @return the positive integer collected from the user
+   */
+  private int collectPositiveInt(String prompt) {
+    while (true) {
+      try {
+        System.out.println(prompt);
+        int number = Integer.parseInt(input.nextLine());
+        if (number > 0) {
+          return number;
+        }
+        System.out.println("Number must be positive. Please try again.");
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid number format. Please try again.");
+      }
+    }
+  }
+
+  /**
+   * This method collects an optional integer from the user.
+   * @param prompt the prompt to display to the user
+   * @return the optional integer collected from the user
+   */
+  private int collectOptionalInt(String prompt) {
+    System.out.println(prompt);
+    String inputString = input.nextLine();
+    if (inputString.trim().isEmpty()) {
+      return -1;
+    }
+    try {
+      return Integer.parseInt(inputString);
+    } catch (NumberFormatException e) {
+      System.out.println("Invalid number format. Using default value.");
+      return -1;
+    }
+  }
+
 
   /**
    * Sets the track of a train departure.

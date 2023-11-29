@@ -29,17 +29,27 @@ public class TrainDeparture {
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param delay         the delay. Mutable.
-   * @throws NullPointerException     if any of the LocalTime parameters are null.
-   * @throws IllegalArgumentException if trainNumber is not a positive integer.
+   * @throws IllegalArgumentException if departure, delay, line or destination is null or empty, or
+   *                                  if trainNumber is not a positive integer.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
-      LocalTime delay) throws NullPointerException {
-    if (departureTime == null || delay == null) {
-      throw new NullPointerException("Null values are not allowed");
+      LocalTime delay) {
+    if (departureTime == null) {
+      throw new IllegalArgumentException("Departure time cannot be null");
+    }
+    if (delay == null) {
+      throw new IllegalArgumentException("Delay cannot be null");
+    }
+    if (line == null || line.trim().isEmpty()) {
+      throw new IllegalArgumentException("Line cannot be null or empty");
+    }
+    if (destination == null || destination.trim().isEmpty()) {
+      throw new IllegalArgumentException("Destination cannot be null or empty");
     }
     if (trainNumber <= 0) {
       throw new IllegalArgumentException("Train number must be a positive integer");
     }
+
     this.departureTime = departureTime;
     this.line = line;
     this.trainNumber = trainNumber;
@@ -56,19 +66,33 @@ public class TrainDeparture {
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param track         the track. Mutable.
-   * @param delay         the delay. Mutable.
-   * @throws NullPointerException     if any of the LocalTime parameters are null.
-   * @throws IllegalArgumentException if trainNumber or track is not a positive integer.
+   * @param delay         the delay. Mutable. if departure, delay, line or destination is null or
+   *                      empty, or if trainNumber is not a positive integer.
+   * @throws IllegalArgumentException if departure, delay, line or destination is null or empty, or
+   *                                  if trainNumber is not a positive integer.
    */
 
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       int track, LocalTime delay) {
-    if (departureTime == null || delay == null) {
-      throw new NullPointerException("Null values are not allowed");
+    if (departureTime == null) {
+      throw new IllegalArgumentException("Departure time cannot be null");
     }
-    if (trainNumber <= 0 || track <= 0) {
-      throw new IllegalArgumentException("Train number and track must be positive integers");
+    if (delay == null) {
+      throw new IllegalArgumentException("Delay cannot be null");
     }
+    if (line == null || line.trim().isEmpty()) {
+      throw new IllegalArgumentException("Line cannot be null or empty");
+    }
+    if (destination == null || destination.trim().isEmpty()) {
+      throw new IllegalArgumentException("Destination cannot be null or empty");
+    }
+    if (trainNumber <= 0) {
+      throw new IllegalArgumentException("Train number must be a positive integer");
+    }
+    if (track <= 0) {
+      throw new IllegalArgumentException("Track must be a positive integer");
+    }
+
     this.departureTime = departureTime;
     this.line = line;
     this.trainNumber = trainNumber;
@@ -180,12 +204,14 @@ public class TrainDeparture {
   @Override
   public String toString() {
     String trackStr = this.getTrack() == -1 ? "    " : String.format("%-5d", this.getTrack());
+    String delay =
+        this.getDelay() == LocalTime.of(0, 0) ? "     " : String.format("%-5s", this.getDelay());
     return String.format("%-4d | %-15s | %-18s | %-5s | %-5s%n",
         this.getTrainNumber(),
         this.getDepartureTime(),
         this.getLine() + " " + this.getDestination(),
         trackStr,
-        this.getDelay());
+        delay);
   }
 
 }
