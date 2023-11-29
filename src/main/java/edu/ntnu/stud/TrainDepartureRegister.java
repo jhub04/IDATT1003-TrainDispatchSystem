@@ -57,6 +57,14 @@ public class TrainDepartureRegister {
 
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
+    if (searchByTrainNumber(trainNumber) != null) {
+      throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
+    }
+    if (departureTime.isBefore(systemTime)) {
+      throw new IllegalArgumentException(
+          "Cannot assign a train departure time before the current time.");
+    }
+
     try {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, delay);
@@ -79,6 +87,14 @@ public class TrainDepartureRegister {
    */
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
+    if (searchByTrainNumber(trainNumber) != null) {
+      throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
+    }
+    if (departureTime.isBefore(systemTime)) {
+      throw new IllegalArgumentException(
+          "Cannot assign a train departure time before the current time.");
+    }
+
     try {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, track, delay);
