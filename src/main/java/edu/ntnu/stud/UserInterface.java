@@ -57,8 +57,8 @@ public class UserInterface {
     }
 
     String destination = collectString("Enter destination: ");
-    int track = collectOptionalInt("Enter track (optional): ");
-    LocalTime delay = collectTime("Enter delay (hh:mm): ", formatter);
+    int track = collectOptionalInt("Enter track [optional]: ");
+    LocalTime delay = collectOptionalTime("Enter delay (hh:mm) [optional]: ", formatter);
 
     // Add the train departure
     try {
@@ -84,6 +84,26 @@ public class UserInterface {
       } catch (DateTimeParseException e) {
         System.out.println("Invalid time format. Please try again.");
       }
+    }
+  }
+
+  /**
+   * This method collects an optional time from the user.
+   * @param prompt the prompt to display to the user
+   * @param formatter the formatter to use for parsing the time
+   * @return the optional time collected from the user
+   */
+  private LocalTime collectOptionalTime(String prompt, DateTimeFormatter formatter) {
+    System.out.println(prompt);
+    String inputString = input.nextLine();
+    if (inputString.trim().isEmpty()) {
+      return LocalTime.of(0, 0);
+    }
+    try {
+      return LocalTime.parse(inputString, formatter);
+    } catch (DateTimeParseException e) {
+      System.out.println("Invalid time format. Using default value.");
+      return LocalTime.of(0, 0);
     }
   }
 
@@ -145,7 +165,6 @@ public class UserInterface {
     }
   }
 
-
   /**
    * Sets the track of a train departure.
    */
@@ -158,7 +177,7 @@ public class UserInterface {
       return;
     }
 
-    int track = collectPositiveInt("Enter track: ");
+    int track = collectOptionalInt("Enter track: ");
 
     try {
       register.setTrack(trainNumber, track);
@@ -182,7 +201,7 @@ public class UserInterface {
       System.out.println("Error: A train with train number " + trainNumber + " doesn't exists.");
       return;
     }
-    LocalTime delay = collectTime("Enter delay (hh:mm): ", formatter);
+    LocalTime delay = collectOptionalTime("Enter delay (hh:mm): ", formatter);
 
     try {
       register.setDelay(trainNumber, delay);
