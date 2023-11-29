@@ -33,10 +33,9 @@ public class TrainDepartureRegister {
    * departureTime.
    *
    * @param departure the TrainDeparture that's to be added
-   * @return true if the TrainDeparture was added correctly
    */
 
-  private boolean sorted(TrainDeparture departure) {
+  private void sorted(TrainDeparture departure) {
     int insertionIndex = Collections.binarySearch(register, departure,
         Comparator.comparing(TrainDeparture::getDepartureTime));
     if (insertionIndex < 0) {
@@ -44,7 +43,6 @@ public class TrainDepartureRegister {
 
     }
     register.add(insertionIndex, departure);
-    return true;
   }
 
   /**
@@ -83,7 +81,7 @@ public class TrainDepartureRegister {
       String destination, int track, LocalTime delay) {
     try {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
-          destination, delay);
+          destination, track, delay);
       sorted(newDeparture);
     } catch (Exception e) {
       System.out.println(e.getMessage());
