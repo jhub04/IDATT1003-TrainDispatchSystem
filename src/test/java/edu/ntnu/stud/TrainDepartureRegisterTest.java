@@ -16,7 +16,7 @@ public class TrainDepartureRegisterTest {
   void setUp() {
     register = new TrainDepartureRegister();
 
-    register.addTrainDeparture(LocalTime.of(15, 5), "L1", 1, "Spikkestad",
+    register.addTrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad",
         LocalTime.of(0, 0));
     register.addTrainDeparture(LocalTime.of(16, 0), "RE11", 70, "Skien",
         LocalTime.of(0, 0));
@@ -29,33 +29,37 @@ public class TrainDepartureRegisterTest {
 
     @Test
     void shouldAddTrainDeparture() {
-      assertTrue(register.addTrainDeparture(LocalTime.of(14, 0), "RE11", 2, "Skien",
+      assertDoesNotThrow(() -> register.addTrainDeparture(LocalTime.of(14, 0), "RE11", 2, "Skien",
           LocalTime.of(0, 0)));
     }
 
     @Test
     void shouldNotAddSameTrainDeparture() {
-      assertFalse(register.addTrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad",
-          LocalTime.of(0, 0)));
-
+      assertThrows(IllegalArgumentException.class,
+          () -> register.addTrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad",
+              LocalTime.of(0, 0)));
     }
 
     @Test
     void shouldNotAddSameTrainDepartureButWithTrack() {
-      assertFalse(register.addTrainDeparture(LocalTime.of(16, 0), "RE11", 70, "Skien", 3,
-          LocalTime.of(0, 0)));
+      assertThrows(IllegalArgumentException.class,
+          () -> register.addTrainDeparture(LocalTime.of(12, 0), "L1", 1, "Spikkestad", 2,
+              LocalTime.of(0, 0)));
     }
 
     @Test
     void shouldNotAddTrainDepartureWithSameTrainNumber() {
-      assertFalse(register.addTrainDeparture(LocalTime.of(16, 10), "L2", 70, "Ski",
-          LocalTime.of(0, 5)));
+      assertThrows(IllegalArgumentException.class,
+          () -> register.addTrainDeparture(LocalTime.of(14, 0), "RE11", 70, "Skien",
+              LocalTime.of(0, 0)));
+
     }
 
     @Test
     void shouldNotAddTrainDepartureWithSameTrainNumberButWithTrack() {
-      assertFalse(register.addTrainDeparture(LocalTime.of(16, 10), "L2", 70, "Ski", 3,
-          LocalTime.of(0, 5)));
+      assertThrows(IllegalArgumentException.class,
+          () -> register.addTrainDeparture(LocalTime.of(14, 0), "RE11", 70, "Skien", 2,
+              LocalTime.of(0, 0)));
     }
 
     @Nested
@@ -81,7 +85,7 @@ public class TrainDepartureRegisterTest {
       @Test
       void shouldFindTrainDeparture() {
         assertNotNull(register.searchByTrainNumber(1));
-        assertEquals(LocalTime.of(15, 5), register.searchByTrainNumber(1).getDepartureTime());
+        assertEquals(LocalTime.of(12, 0), register.searchByTrainNumber(1).getDepartureTime());
         assertEquals("L1", register.searchByTrainNumber(1).getLine());
       }
 
@@ -158,7 +162,7 @@ public class TrainDepartureRegisterTest {
 
       @Test
       void shouldSortTrainDeparturesByAscendingOrder() {
-        assertEquals(LocalTime.of(15, 5),
+        assertEquals(LocalTime.of(12, 0),
             register.getDepartures().get(0).getDepartureTime());
         assertEquals(LocalTime.of(16, 0),
             register.getDepartures().get(1).getDepartureTime());
@@ -178,7 +182,7 @@ public class TrainDepartureRegisterTest {
 
       @Test
       void shouldSortTrainDeparturesByAscendingOrderWithDelay() {
-        assertEquals(LocalTime.of(15, 5),
+        assertEquals(LocalTime.of(12, 0),
             register.getDepartures().get(0).getDepartureTimeWithDelay());
         assertEquals(LocalTime.of(16, 0),
             register.getDepartures().get(1).getDepartureTimeWithDelay());
