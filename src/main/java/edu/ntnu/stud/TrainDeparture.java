@@ -89,9 +89,6 @@ public class TrainDeparture {
     if (trainNumber <= 0) {
       throw new IllegalArgumentException("Train number must be a positive integer");
     }
-    if (track <= 0) {
-      throw new IllegalArgumentException("Track must be a positive integer");
-    }
 
     this.departureTime = departureTime;
     this.line = line;
@@ -197,21 +194,21 @@ public class TrainDeparture {
   }
 
   /**
-   * Provides a string representation of a Traindeparture object.
+   * Provides a string representation of a TrainDeparture object.
    *
    * @return A string detailing the information about the departure.
    */
   @Override
   public String toString() {
     String trackStr = this.getTrack() == -1 ? "    " : String.format("%-5d", this.getTrack());
-    String delay =
+    String delayStr =
         this.getDelay() == LocalTime.of(0, 0) ? "     " : String.format("%-5s", this.getDelay());
     return String.format("%-4d | %-15s | %-18s | %-5s | %-5s%n",
         this.getTrainNumber(),
         this.getDepartureTime(),
         this.getLine() + " " + this.getDestination(),
         trackStr,
-        delay);
+        delayStr);
   }
 
 }
