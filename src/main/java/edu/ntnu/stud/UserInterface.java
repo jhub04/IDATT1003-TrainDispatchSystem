@@ -71,7 +71,8 @@ public class UserInterface {
 
   /**
    * This method collects a time from the user.
-   * @param prompt the prompt to display to the user
+   *
+   * @param prompt    the prompt to display to the user
    * @param formatter the formatter to use for parsing the time
    * @return the time collected from the user
    */
@@ -88,6 +89,7 @@ public class UserInterface {
 
   /**
    * This method collects a string from the user.
+   *
    * @param prompt the prompt to display to the user
    * @return the string collected from the user
    */
@@ -104,6 +106,7 @@ public class UserInterface {
 
   /**
    * This method collects a positive integer from the user.
+   *
    * @param prompt the prompt to display to the user
    * @return the positive integer collected from the user
    */
@@ -124,6 +127,7 @@ public class UserInterface {
 
   /**
    * This method collects an optional integer from the user.
+   *
    * @param prompt the prompt to display to the user
    * @return the optional integer collected from the user
    */
@@ -147,12 +151,22 @@ public class UserInterface {
    */
 
   public void setTrack() {
-    System.out.println("Enter train number: ");
-    int trainNumber = input.nextInt();
-    System.out.println("Enter track: ");
-    int track = input.nextInt();
-    register.setTrack(trainNumber, track);
+    int trainNumber = collectPositiveInt("Enter train number: ");
+    // Validate train number
+    if (register.searchByTrainNumber(trainNumber) == null) {
+      System.out.println("Error: A train with train number " + trainNumber + " doesn't exists.");
+      return;
+    }
 
+    int track = collectPositiveInt("Enter track: ");
+
+    try {
+      register.setTrack(trainNumber, track);
+      System.out.println("Track successfully set for train number " + trainNumber);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
+    // You can add more catch blocks for other specific exceptions if necessary.
   }
 
   /**
@@ -160,23 +174,36 @@ public class UserInterface {
    */
 
   public void setDelay() {
-    System.out.println("Enter train number: ");
-    int trainNumber = input.nextInt();
-    input.nextLine();
-    System.out.println("Enter delay (hh:mm): ");
-    String delayString = input.nextLine();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-    LocalTime delay = LocalTime.parse(delayString, formatter);
-    register.setDelay(trainNumber, delay);
 
+    int trainNumber = collectPositiveInt("Enter train number: ");
+    // Validate train number
+    if (register.searchByTrainNumber(trainNumber) == null) {
+      System.out.println("Error: A train with train number " + trainNumber + " doesn't exists.");
+      return;
+    }
+    LocalTime delay = collectTime("Enter delay (hh:mm): ", formatter);
+
+    try {
+      register.setDelay(trainNumber, delay);
+      System.out.println("Delay successfully set for train " + trainNumber);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
+    // Additional catch blocks can be added here for other exceptions.
   }
+
 
   /**
    * Searches for a train departure by train number.
    */
   public void searchByTrainNumber() {
-    System.out.println("Enter train number: ");
-    int trainNumber = input.nextInt();
+    int trainNumber = collectPositiveInt("Enter train number: ");
+    // Validate train number
+    if (register.searchByTrainNumber(trainNumber) == null) {
+      System.out.println("Error: A train with train number " + trainNumber + " doesn't exists.");
+      return;
+    }
     System.out.println(register.searchByTrainNumberString(trainNumber));
 
   }
@@ -186,8 +213,7 @@ public class UserInterface {
    */
 
   public void searchByDestination() {
-    System.out.println("Enter destination: ");
-    String destination = input.nextLine();
+    String destination = collectString("Enter destination: ");
     System.out.println(register.searchByDestinationString(destination));
 
   }
@@ -197,10 +223,10 @@ public class UserInterface {
    */
 
   public void setSystemTime() {
-    System.out.println("Enter new system time (hh:mm): ");
-    LocalTime systemTime = LocalTime.parse(input.nextLine());
+    LocalTime systemTime = collectTime("Enter system time (hh:mm): ",
+        DateTimeFormatter.ofPattern("HH:mm"));
     if (!register.setSystemTime(systemTime)) {
-      System.out.println("Invalid time");
+      System.out.println("Can not set system time before current time.");
       setSystemTime();
     }
     register.setSystemTime(systemTime);
@@ -211,7 +237,7 @@ public class UserInterface {
    */
 
   public void displayMenu() {
-    System.out.println("Time: " + register.getSystemTime());
+    System.out.println("\nTime: " + register.getSystemTime());
     System.out.println("[1] Display all departures");
     System.out.println("[2] Add departure");
     System.out.println("[3] Set track");

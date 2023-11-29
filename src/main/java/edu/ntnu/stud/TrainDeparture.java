@@ -178,9 +178,9 @@ public class TrainDeparture {
    * @param delay the delay (LocalTime).
    * @throws DateTimeException if delay is a negative time.
    */
-  public void setDelay(LocalTime delay) throws DateTimeException {
+  public void setDelay(LocalTime delay) throws IllegalArgumentException {
     if (delay.isBefore(LocalTime.of(0, 0)) || delay.equals(LocalTime.of(0, 0))) {
-      throw new DateTimeException("Delay must be a positive time");
+      throw new IllegalArgumentException("Delay must be a positive time");
     }
     this.delay = delay;
   }
