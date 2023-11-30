@@ -16,7 +16,7 @@ public class TrainDispatchApp {
    */
   public static void main(String[] args) {
     UserInterface ui = new UserInterface();
-    System.out.println("Welcome to the train dispatch application!");
+    System.out.println("\nWelcome to the train dispatch application!\n");
     ui.init();
     ui.start();
   }
