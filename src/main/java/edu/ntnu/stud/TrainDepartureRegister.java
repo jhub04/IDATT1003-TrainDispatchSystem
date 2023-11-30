@@ -2,7 +2,6 @@ package edu.ntnu.stud;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,23 +28,6 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * Sorts and adds a departure to the correct place in the register, according to the
-   * departureTime.
-   *
-   * @param departure the TrainDeparture that's to be added
-   */
-
-  private void sorted(TrainDeparture departure) {
-    int insertionIndex = Collections.binarySearch(register, departure,
-        Comparator.comparing(TrainDeparture::getDepartureTime));
-    if (insertionIndex < 0) {
-      insertionIndex = -insertionIndex - 1;
-
-    }
-    register.add(insertionIndex, departure);
-  }
-
-  /**
    * This method adds a train departure without a set track to the register.
    *
    * @param departureTime the departure time
@@ -68,7 +50,7 @@ public class TrainDepartureRegister {
     try {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, delay);
-      sorted(newDeparture);
+      register.add(newDeparture);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
@@ -98,7 +80,7 @@ public class TrainDepartureRegister {
     try {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, track, delay);
-      sorted(newDeparture);
+      register.add(newDeparture);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
@@ -199,6 +181,7 @@ public class TrainDepartureRegister {
    * @return a sorted list of train departures by the departure time.
    */
   public List<TrainDeparture> getDepartures() {
+    register.sort(Comparator.comparing(TrainDeparture::getDepartureTime));
     return register;
   }
 
