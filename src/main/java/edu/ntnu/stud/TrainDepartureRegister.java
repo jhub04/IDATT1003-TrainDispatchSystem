@@ -162,7 +162,7 @@ public class TrainDepartureRegister {
    */
   public List<TrainDeparture> searchByDestination(String destination) {
     return register.stream()
-        .filter(departure -> departure.getDestination().equals(destination))
+        .filter(departure -> departure.getDestination().toLowerCase().equals(destination))
         .toList();
   }
 
@@ -265,7 +265,7 @@ public class TrainDepartureRegister {
 
   @Override
   public String toString() {
-    String newDepartures = register.stream()
+    String newDepartures = getDepartures().stream()
         .map(TrainDeparture::toString)
         .collect(Collectors.joining());
 
