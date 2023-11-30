@@ -162,10 +162,7 @@ public class TrainDeparture {
    * @param track the track (int).
    * @throws IllegalArgumentException if track is not a positive integer.
    */
-  public void setTrack(int track) throws IllegalArgumentException {
-    if (track <= 0) {
-      throw new IllegalArgumentException("Track must be a positive integer");
-    }
+  public void setTrack(int track) {
     this.track = track;
   }
 
@@ -175,10 +172,7 @@ public class TrainDeparture {
    * @param delay the delay (LocalTime).
    * @throws DateTimeException if delay is a negative time.
    */
-  public void setDelay(LocalTime delay) throws IllegalArgumentException {
-    if (delay.isBefore(LocalTime.of(0, 0)) || delay.equals(LocalTime.of(0, 0))) {
-      throw new IllegalArgumentException("Delay must be a positive time");
-    }
+  public void setDelay(LocalTime delay) {
     this.delay = delay;
   }
 
@@ -206,7 +200,8 @@ public class TrainDeparture {
     return String.format("%-4d | %-15s | %-18s | %-5s | %-5s%n",
         this.getTrainNumber(),
         this.getDepartureTime(),
-        this.getLine() + " " + this.getDestination(),
+        this.getLine() + " " + this.getDestination().substring(0, 1).toUpperCase()
+            + this.getDestination().substring(1),
         trackStr,
         delayStr);
   }
