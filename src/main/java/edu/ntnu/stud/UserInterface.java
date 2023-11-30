@@ -79,7 +79,7 @@ public class UserInterface {
 
     while (true) {
       System.out.println(
-          "Enter line (Uppercase letter(s) followed by letter(s). e.g., L1, RE11): ");
+          "Enter line (Uppercase letter(s) followed by number(s). e.g., L1, RE11): ");
       String line = input.nextLine();
       if (!line.trim().isEmpty()) {
         Matcher matcher = pattern.matcher(line);
@@ -168,7 +168,7 @@ public class UserInterface {
   private LocalTime collectDelay() {
     while (true) {
       try {
-        System.out.println("Enter delay [optional]: ");
+        System.out.println("Enter delay [optional] (hh:mm): ");
         String delayString = input.nextLine();
         if (delayString.trim().isEmpty()) {
           return LocalTime.of(0, 0);
@@ -271,6 +271,8 @@ public class UserInterface {
   public void setSystemTime() {
     LocalTime systemTime = collectSystemTime();
     register.setSystemTime(systemTime);
+    System.out.println("System time successfully set to " + systemTime);
+    displayDepartures();
   }
 
   /**
@@ -278,7 +280,6 @@ public class UserInterface {
    */
 
   public void displayMenu() {
-    System.out.println("\nTime: " + register.getSystemTime());
     System.out.println("[1] Display all departures");
     System.out.println("[2] Add departure");
     System.out.println("[3] Set track");
@@ -331,6 +332,7 @@ public class UserInterface {
    */
   public void init() {
     register.getInitialData();
+    displayDepartures();
   }
 
   /**
@@ -338,7 +340,6 @@ public class UserInterface {
    */
   public void start() {
     while (true) {
-      displayDepartures();
       System.out.println();
       displayMenu();
       getUserInput();
