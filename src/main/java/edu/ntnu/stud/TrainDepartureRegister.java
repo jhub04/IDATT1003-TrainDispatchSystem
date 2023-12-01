@@ -102,6 +102,23 @@ public class TrainDepartureRegister {
   }
 
   /**
+   * Removes a departure from the register
+   */
+
+  public void removeDeparture(int trainNumber) {
+    if (searchByTrainNumber(trainNumber) == null) {
+      throw new IllegalArgumentException("A train with that number doesn't exist");
+    }
+
+    try {
+      register.remove(searchByTrainNumber(trainNumber));
+      dataHandler.removeDepartureFromCsv(trainNumber, "src/main/java/edu/ntnu/stud", "Departures.csv");
+    } catch (IOException e) {
+      System.out.println("Error" + e.getMessage());
+    }
+  }
+
+  /**
    * Gets the system time.
    *
    * @return the system time

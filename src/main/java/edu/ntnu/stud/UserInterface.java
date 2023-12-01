@@ -202,6 +202,17 @@ public class UserInterface {
     }
   }
 
+  public void removeDeparture() {
+    int trainNumber = collectTrainNumber();
+
+    try{
+      register.removeDeparture(trainNumber);
+      displayDepartures();
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
   /**
    * Sets the track of a train departure.
    */
@@ -283,12 +294,13 @@ public class UserInterface {
   public void displayMenu() {
     System.out.println("[1] Display all departures");
     System.out.println("[2] Add departure");
-    System.out.println("[3] Set track");
-    System.out.println("[4] Set delay");
-    System.out.println("[5] Search by train number");
-    System.out.println("[6] Search by destination");
-    System.out.println("[7] Change system time");
-    System.out.println("[8] Exit");
+    System.out.println("[3] Remove departure");
+    System.out.println("[4] Set track");
+    System.out.println("[5] Set delay");
+    System.out.println("[6] Search by train number");
+    System.out.println("[7] Search by destination");
+    System.out.println("[8] Change system time");
+    System.out.println("[9] Exit");
   }
 
   /**
@@ -306,21 +318,24 @@ public class UserInterface {
         addDeparture();
         break;
       case 3:
-        setTrack();
+        removeDeparture();
         break;
       case 4:
-        setDelay();
+        setTrack();
         break;
       case 5:
-        searchByTrainNumber();
+        setDelay();
         break;
       case 6:
-        searchByDestination();
+        searchByTrainNumber();
         break;
       case 7:
-        setSystemTime();
+        searchByDestination();
         break;
       case 8:
+        setSystemTime();
+        break;
+      case 9:
         System.exit(0);
         break;
       default:
