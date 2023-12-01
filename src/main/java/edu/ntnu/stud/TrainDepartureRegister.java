@@ -194,20 +194,6 @@ public class TrainDepartureRegister {
     return register.size();
   }
 
-  /**
-   * This method adds some initial data to the register.
-   */
-  public void getInitialData() {
-    this.addTrainDeparture(LocalTime.of(15, 5), "L1", 1, "Spikkestad", 2,
-        LocalTime.of(0, 0));
-    this.addTrainDeparture(LocalTime.of(16, 0), "RE11", 70, "Skien",
-        LocalTime.of(0, 0));
-    this.addTrainDeparture(LocalTime.of(16, 10), "L2", 110, "Ski", 3, LocalTime.of(0, 5));
-    this.addTrainDeparture(LocalTime.of(15, 30), "L1", 170, "Spikkestad",
-        LocalTime.of(0, 0));
-
-  }
-
 
   /**
    * The formatting of the header and separator of the string representations.
