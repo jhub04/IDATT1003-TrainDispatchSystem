@@ -13,8 +13,6 @@ import java.util.Arrays;
 
 public class DataHandler {
 
-  TrainDepartureRegister register = new TrainDepartureRegister();
-
   public void writeAFileAsCsv(TrainDepartureRegister registerToWrite, String pathOfFile,
       String fileName)
       throws IOException {
@@ -35,7 +33,7 @@ public class DataHandler {
     }
   }
 
-  public void readAFileAsCsv(String pathOfFile, String fileName) throws IOException {
+  public void readAFileAsCsv(TrainDepartureRegister register, String pathOfFile, String fileName) throws IOException {
     Path path = Paths.get(pathOfFile + "/" + fileName);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
