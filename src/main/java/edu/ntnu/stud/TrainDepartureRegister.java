@@ -54,6 +54,12 @@ public class TrainDepartureRegister {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, delay);
       register.add(newDeparture);
+      try {
+        dataHandler.writeDepartureToCsv(newDeparture, "src/main/java/edu/ntnu/stud",
+            "Departures.csv");
+      } catch (IOException e) {
+        System.out.println("Error: " + e.getMessage());
+      }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
@@ -84,6 +90,12 @@ public class TrainDepartureRegister {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, track, delay);
       register.add(newDeparture);
+      try {
+        dataHandler.writeDepartureToCsv(newDeparture, "src/main/java/edu/ntnu/stud",
+            "Departures.csv");
+      } catch (IOException e) {
+        System.out.println("Error: " + e.getMessage());
+      }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

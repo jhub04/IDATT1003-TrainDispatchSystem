@@ -333,16 +333,18 @@ public class UserInterface {
    */
   public void init() {
     register.readData();
+    displayDepartures();
   }
 
   /**
    * This method starts the user interface and checks that it's working properly.
    */
   public void start() {
-    displayDepartures();
-    System.out.println();
-    displayMenu();
-    getUserInput();
+    while (true) {
+      System.out.println();
+      displayMenu();
+      getUserInput();
+    }
   }
 
 }

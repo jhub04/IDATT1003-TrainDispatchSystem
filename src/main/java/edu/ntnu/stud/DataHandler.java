@@ -104,44 +104,29 @@ public class DataHandler {
   /**
    * Writes a single departure to a csv file.
    *
-   * @param departureToWrite the departure to write to file
-   * @param pathOfFile       the path of the file
-   * @param fileName         the name of the file
+   * @param departure  the departure to write to file
+   * @param pathOfFile the path of the file
+   * @param fileName   the name of the file
    * @throws IOException if the file already exists
    */
 
-  public void writeDepartureToCsv(TrainDeparture departureToWrite, String pathOfFile,
+  public void writeDepartureToCsv(TrainDeparture departure, String pathOfFile,
       String fileName)
       throws IOException {
     Path path = Paths.get(pathOfFile + "/" + fileName);
-    List<String> dataToWrite = new ArrayList<>();
-    String formattedDeparture = departureToWrite.getDepartureTime() + "," + departureToWrite
-        .getLine() + "," + departureToWrite.getTrainNumber() + "," + departureToWrite
-        .getDestination() + "," + departureToWrite.getTrack() + "," + departureToWrite.getDelay()
-        + System.lineSeparator();
+    List<String> data = new ArrayList<>();
+    String formattedDeparture = departure.getDepartureTime() + "," + departure
+        .getLine() + "," + departure.getTrainNumber() + "," + departure
+        .getDestination() + "," + departure.getTrack() + "," + departure.getDelay() + ",";
 
     if (!Files.exists(path)) {
-      dataToWrite.add("Departure time,Line,Train number,Destination,Track,Delay");
+      data.add("Departure time,Line,Train number,Destination,Track,Delay");
     }
 
-    dataToWrite.add(formattedDeparture);
+    data.add(formattedDeparture);
     Files.write(path, Collections.singletonList(formattedDeparture), StandardOpenOption.CREATE,
         StandardOpenOption.APPEND, StandardOpenOption.WRITE);
 
 
   }
-
-  public static void main(String[] args) {
-    DataHandler dh = new DataHandler();
-
-    /**try {
-     TrainDeparture departure = new TrainDeparture(LocalTime.of(11, 0), "L1", 100, "Oslo", 1,
-     LocalTime.of(0, 0));
-     dh.writeDepartureToCsv(departure, "src/main/java/edu/ntnu/stud", "Departures.csv");
-     } catch (IOException e) {
-     throw new RuntimeException(e);
-     }*/
-
-  }
-
 }
