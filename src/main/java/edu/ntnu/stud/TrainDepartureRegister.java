@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,8 +17,10 @@ import java.util.stream.Collectors;
  */
 public class TrainDepartureRegister {
 
-  private final List<TrainDeparture> register;
+  private List<TrainDeparture> register;
   private LocalTime systemTime;
+
+  private final DataHandler dataHandler = new DataHandler();
 
   /**
    * Constructor for TrainDepartureRegister.
@@ -194,7 +197,6 @@ public class TrainDepartureRegister {
     return register.size();
   }
 
-
   /**
    * The formatting of the header and separator of the string representations.
    *
@@ -221,6 +223,15 @@ public class TrainDepartureRegister {
       return "No train departures with train number " + trainNumber + " found.";
     } else {
       return formatDepartures() + departure;
+    }
+  }
+
+  public void readData() {
+    try {
+      this.register = dataHandler.readCsv(register, "src/main/java/edu/ntnu/stud",
+          "Departures.csv");
+    } catch (IOException e) {
+      System.out.println("Error: " + e.getMessage());
     }
   }
 

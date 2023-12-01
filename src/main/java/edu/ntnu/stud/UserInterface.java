@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.io.IOException;
 
 /**
  * This is the user interface class for the train dispatch application.
@@ -19,7 +18,6 @@ public class UserInterface {
 
   private final TrainDepartureRegister register;
 
-  private final DataHandler dataHandler = new DataHandler();
   private final Scanner input;
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -334,23 +332,17 @@ public class UserInterface {
    * This method initializes the user interface.
    */
   public void init() {
-    try {
-      dataHandler.readAFileAsCsv(register, "src/main/java/edu/ntnu/stud", "departures.csv");
-    } catch (IOException e) {
-      System.out.println(e.getMessage());
-    }
-    displayDepartures();
+    register.readData();
   }
 
   /**
    * This method starts the user interface and checks that it's working properly.
    */
   public void start() {
-    while (true) {
-      System.out.println();
-      displayMenu();
-      getUserInput();
-    }
+    displayDepartures();
+    System.out.println();
+    displayMenu();
+    getUserInput();
   }
 
 }
