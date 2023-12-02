@@ -20,8 +20,8 @@ public class TrainDepartureRegister {
   private List<TrainDeparture> register;
   private LocalTime systemTime;
 
-  private final String pathOfFile = "src/main/java/edu/ntnu/stud";
-  private final String fileName = "Departures.csv";
+  private static final String pathOfFile = "src/main/java/edu/ntnu/stud";
+  private static final String fileName = "Departures.csv";
 
   private final DataHandler dataHandler = new DataHandler();
 
