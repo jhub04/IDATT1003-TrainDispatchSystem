@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 import java.time.LocalTime;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -43,7 +44,7 @@ public class UserInterface {
   public void addDeparture() {
     LocalTime departureTime = collectDepartureTime();
     String line = collectLine();
-    int trainNumber = collectTrainNumberWithCheck();
+    int trainNumber = collectTrainNumberDoesntExist();
     String destination = collectDestination();
     int track = collectTrack();
     LocalTime delay = collectDelay();
@@ -96,34 +97,37 @@ public class UserInterface {
     }
   }
 
-  private int collectTrainNumberWithCheck() {
+  private int collectTrainNumberDoesntExist() {
     while (true) {
       try {
         System.out.println("Enter train number: ");
         int trainNumber = Integer.parseInt(input.nextLine());
         if (register.searchByTrainNumber(trainNumber) != null) {
           System.out.println("Error: A train with number " + trainNumber + " already exists.");
-        } else if (trainNumber < 0 || trainNumber > 999) {
-          System.out.println("Error: Train number must be between 0 and 999.");
-        } else {
-          return trainNumber;
+          continue;
         }
+        if (trainNumber < 0 || trainNumber > 999) {
+          System.out.println("Error: Train number must be between 0 and 999.");
+          continue;
+        }
+        return trainNumber;
       } catch (NumberFormatException e) {
         System.out.println("Invalid number format. Please try again.");
       }
     }
   }
 
-  private int collectTrainNumber() {
+  private int collectTrainNumberDoesExist() {
     while (true) {
       try {
         System.out.println("Enter train number: ");
         int trainNumber = Integer.parseInt(input.nextLine());
-        if (trainNumber < 0 || trainNumber > 999) {
-          System.out.println("Error: Train number must be between 0 and 999.");
-        } else {
-          return trainNumber;
+        if (register.searchByTrainNumber(trainNumber) == null) {
+          System.out.println("Error: A train with number " + trainNumber + " doesn't exist.");
+          continue;
         }
+        return trainNumber;
+
       } catch (NumberFormatException e) {
         System.out.println("Invalid number format. Please try again.");
       }
@@ -203,14 +207,10 @@ public class UserInterface {
   }
 
   public void removeDeparture() {
-    int trainNumber = collectTrainNumber();
+    int trainNumber = collectTrainNumberDoesExist();
 
-    try{
-      register.removeDeparture(trainNumber);
-      displayDepartures();
-    } catch (IllegalArgumentException e) {
-      System.out.println(e.getMessage());
-    }
+    register.removeDeparture(trainNumber);
+    displayDepartures();
   }
 
   /**
@@ -218,7 +218,7 @@ public class UserInterface {
    */
 
   public void setTrack() {
-    int trainNumber = collectTrainNumber();
+    int trainNumber = collectTrainNumberDoesExist();
     int track = collectTrack();
 
     try {
@@ -240,7 +240,7 @@ public class UserInterface {
    */
 
   public void setDelay() {
-    int trainNumber = collectTrainNumber();
+    int trainNumber = collectTrainNumberDoesExist();
     LocalTime delay = collectDelay();
 
     try {
@@ -261,7 +261,7 @@ public class UserInterface {
    * Searches for a train departure by train number.
    */
   public void searchByTrainNumber() {
-    int trainNumber = collectTrainNumber();
+    int trainNumber = collectTrainNumberDoesExist();
     System.out.println(register.searchByTrainNumberString(trainNumber));
 
   }
@@ -308,38 +308,43 @@ public class UserInterface {
    */
   public void getUserInput() {
     System.out.print("> ");
-    int choice = input.nextInt();
-    input.nextLine();
-    switch (choice) {
-      case 1:
-        displayDepartures();
-        break;
-      case 2:
-        addDeparture();
-        break;
-      case 3:
-        removeDeparture();
-        break;
-      case 4:
-        setTrack();
-        break;
-      case 5:
-        setDelay();
-        break;
-      case 6:
-        searchByTrainNumber();
-        break;
-      case 7:
-        searchByDestination();
-        break;
-      case 8:
-        setSystemTime();
-        break;
-      case 9:
-        System.exit(0);
-        break;
-      default:
-        System.out.println("Invalid choice");
+    try {
+      int choice = input.nextInt();
+      input.nextLine();
+      switch (choice) {
+        case 1:
+          displayDepartures();
+          break;
+        case 2:
+          addDeparture();
+          break;
+        case 3:
+          removeDeparture();
+          break;
+        case 4:
+          setTrack();
+          break;
+        case 5:
+          setDelay();
+          break;
+        case 6:
+          searchByTrainNumber();
+          break;
+        case 7:
+          searchByDestination();
+          break;
+        case 8:
+          setSystemTime();
+          break;
+        case 9:
+          System.exit(0);
+          break;
+        default:
+          System.out.println("Invalid choice");
+      }
+
+    } catch (InputMismatchException e) {
+      System.out.println("Invalid input. Please enter a number");
     }
   }
 
