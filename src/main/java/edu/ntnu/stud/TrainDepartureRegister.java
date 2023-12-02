@@ -261,7 +261,7 @@ public class TrainDepartureRegister {
    * @return the header and separator.
    */
   private String formatDepartures() {
-    String time = "Time: " + systemTime.toString() + "\n";
+    String time = "\nTime: " + systemTime.toString() + "\n";
     String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
         "Nr", "Departure Time", "Destination", "Track", "Delay");
     String separator = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",

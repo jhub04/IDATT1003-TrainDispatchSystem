@@ -103,7 +103,8 @@ public class UserInterface {
         System.out.println("Enter train number: ");
         int trainNumber = Integer.parseInt(input.nextLine());
         if (register.trainNumberExistsInCsv(trainNumber)) {
-          System.out.println("Error: A train with number " + trainNumber + " already exists.");
+          System.out.println("Error: A train departure with number " + trainNumber
+              + " already exists or has existed.");
           continue;
         }
         if (trainNumber < 0 || trainNumber > 999) {
@@ -123,7 +124,8 @@ public class UserInterface {
         System.out.println("Enter train number: ");
         int trainNumber = Integer.parseInt(input.nextLine());
         if (register.searchByTrainNumber(trainNumber) == null) {
-          System.out.println("Error: A train with number " + trainNumber + " doesn't exist.");
+          System.out.println("Error: A train departure with number " + trainNumber
+              + " doesn't exist or has existed.");
           continue;
         }
         return trainNumber;
@@ -307,44 +309,50 @@ public class UserInterface {
    * Gets the user input.
    */
   public void getUserInput() {
-    System.out.print("> ");
-    try {
-      int choice = input.nextInt();
-      input.nextLine();
-      switch (choice) {
-        case 1:
-          displayDepartures();
-          break;
-        case 2:
-          addDeparture();
-          break;
-        case 3:
-          removeDeparture();
-          break;
-        case 4:
-          setTrack();
-          break;
-        case 5:
-          setDelay();
-          break;
-        case 6:
-          searchByTrainNumber();
-          break;
-        case 7:
-          searchByDestination();
-          break;
-        case 8:
-          setSystemTime();
-          break;
-        case 9:
-          System.exit(0);
-          break;
-        default:
-          System.out.println("Invalid choice");
+    boolean running = true;
+    while (running) {
+      displayMenu();
+      System.out.print("> ");
+      try {
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+          case 1:
+            displayDepartures();
+            break;
+          case 2:
+            addDeparture();
+            break;
+          case 3:
+            removeDeparture();
+            break;
+          case 4:
+            setTrack();
+            break;
+          case 5:
+            setDelay();
+            break;
+          case 6:
+            searchByTrainNumber();
+            break;
+          case 7:
+            searchByDestination();
+            break;
+          case 8:
+            setSystemTime();
+            break;
+          case 9:
+            System.out.println("Exiting...");
+            running = false;
+            break;
+          default:
+            System.out.println("Invalid input. Please try again.");
+            break;
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Please try again.");
+        input.nextLine();
       }
-
-    } catch (InputMismatchException e) {
-      System.out.println("Invalid input. Please enter a number");
     }
   }
 
@@ -360,11 +368,6 @@ public class UserInterface {
    * This method starts the user interface and checks that it's working properly.
    */
   public void start() {
-    while (true) {
-      System.out.println();
-      displayMenu();
-      getUserInput();
-    }
+    getUserInput();
   }
-
 }
