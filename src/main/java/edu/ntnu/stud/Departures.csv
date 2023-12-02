@@ -1,7 +1,0 @@
-Departure time,Line,Train number,Destination,Track,Delay,
-15:05,L1,1,Spikkestad,2,00:00,
-15:30,L1,170,Spikkestad,-1,00:00,
-16:00,RE11,70,Skien,-1,00:00,
-16:10,L2,110,Ski,3,00:05,
-16:30,RE11,72,Skien,-1,00:10,
-
