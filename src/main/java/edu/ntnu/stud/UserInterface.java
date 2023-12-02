@@ -34,13 +34,7 @@ public class UserInterface {
     this.input = new Scanner(System.in);
   }
 
-
-  /**
-   * This method displays all the train departures in the temporary register.
-   */
-  public void displayDepartures() {
-    System.out.println(register);
-  }
+  // Methods for adding and removing train departures
 
   /**
    * Adds a train departure to the permanent register.
@@ -72,6 +66,8 @@ public class UserInterface {
     register.removeDeparture(trainNumber);
     displayDepartures();
   }
+
+  // Setters
 
   /**
    * Sets the track of a train departure.
@@ -116,6 +112,18 @@ public class UserInterface {
     }
   }
 
+  /**
+   * Sets the system time .
+   */
+
+  public void setSystemTime() {
+    LocalTime systemTime = collectSystemTime();
+    register.setSystemTime(systemTime);
+    System.out.println("System time successfully set to " + systemTime);
+    displayDepartures();
+  }
+
+  // Methods for searching for train departures
 
   /**
    * Searches for a train departure by train number in the temporary register.
@@ -136,15 +144,13 @@ public class UserInterface {
 
   }
 
-  /**
-   * Sets the system time .
-   */
+  // Methods for displaying data
 
-  public void setSystemTime() {
-    LocalTime systemTime = collectSystemTime();
-    register.setSystemTime(systemTime);
-    System.out.println("System time successfully set to " + systemTime);
-    displayDepartures();
+  /**
+   * This method displays all the train departures in the temporary register.
+   */
+  public void displayDepartures() {
+    System.out.println(register);
   }
 
   /**
@@ -163,6 +169,7 @@ public class UserInterface {
     System.out.println("[9] Exit");
   }
 
+  // Methods for initializing and starting the user interface
 
   /**
    * This method initializes the user interface, reads data from the permanent register and displays
@@ -226,6 +233,8 @@ public class UserInterface {
     }
   }
 
+  // Helper methods for collecting user input with proper validation
+
   /**
    * Collects a valid departure time from the user.
    *
@@ -237,7 +246,8 @@ public class UserInterface {
         System.out.println("Enter departure time (hh:mm): ");
         LocalTime departureTime = LocalTime.parse(input.nextLine(), formatter);
         if (departureTime.isBefore(register.getSystemTime())) {
-          System.out.println(ERROR + "Cannot assign a train departure time before the current time.");
+          System.out.println(
+              ERROR + "Cannot assign a train departure time before the current time.");
         } else {
           return departureTime;
         }
@@ -265,7 +275,8 @@ public class UserInterface {
           return line;
         } else {
           System.out.println(
-              ERROR + "Invalid format. Please enter the line in the correct format (e.g., L1, RE11).");
+              ERROR
+                  + "Invalid format. Please enter the line in the correct format (e.g., L1, RE11).");
         }
       } else {
         System.out.println(ERROR + "Input cannot be empty. Please try again.");
@@ -283,7 +294,8 @@ public class UserInterface {
       System.out.println("Enter train number: ");
       try {
         int trainNumber = Integer.parseInt(input.nextLine());
-        if ((trainNumber >= 0 && trainNumber <= 999) && !register.trainNumberExistsInCsv(trainNumber)) {
+        if ((trainNumber >= 0 && trainNumber <= 999) && !register.trainNumberExistsInCsv(
+            trainNumber)) {
           return trainNumber;
         } else {
           if (trainNumber < 0 || trainNumber > 999) {
