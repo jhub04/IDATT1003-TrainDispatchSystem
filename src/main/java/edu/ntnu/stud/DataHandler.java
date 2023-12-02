@@ -169,4 +169,18 @@ public class DataHandler {
 
     Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
   }
+
+  public boolean trainNumberExistsInCsv(int trainNumber, String pathOfFile, String fileName)
+      throws IOException {
+    Path path = Paths.get(pathOfFile + "/" + fileName);
+    if (!Files.exists(path)) {
+      throw new IOException("File does not exist: " + path);
+    }
+
+    List<String> lines = Files.lines(path)
+        .filter(line -> line.contains("," + trainNumber + ","))
+        .toList();
+
+    return !lines.isEmpty();
+  }
 }
