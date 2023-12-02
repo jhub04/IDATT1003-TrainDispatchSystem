@@ -21,6 +21,8 @@ public class TrainDeparture {
   private int track;
   private LocalTime delay;
 
+  // Constructors
+
   /**
    * Constructor for TrainDeparture without set track.
    *
@@ -98,7 +100,7 @@ public class TrainDeparture {
     this.delay = delay;
   }
 
-  // Getter methods
+  // Getters
 
   /**
    * Gets the departure time of the train.
@@ -154,7 +156,7 @@ public class TrainDeparture {
     return delay;
   }
 
-  // Setter methods
+  // Setters
 
   /**
    * Sets the track of the train.
