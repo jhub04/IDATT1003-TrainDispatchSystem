@@ -46,11 +46,12 @@ public class CsvTrainDepartureManager {
     } else {
       Path finishedDocument = Files.createFile(path);
       data.add("Departure time,Line,Train number,Destination,Track,Delay");
-      for (TrainDeparture trainDeparture : registerToWrite.getDepartures()) {
-        data.add(trainDeparture.getDepartureTime() + "," + trainDeparture.getLine() + ","
-            + trainDeparture.getTrainNumber() + "," + trainDeparture.getDestination() + ","
-            + trainDeparture.getTrack() + "," + trainDeparture.getDelay());
-      }
+      registerToWrite.getDepartures().stream()
+          .map(trainDeparture -> trainDeparture.getDepartureTime() + "," + trainDeparture.getLine()
+              + ","
+              + trainDeparture.getTrainNumber() + "," + trainDeparture.getDestination() + ","
+              + trainDeparture.getTrack() + "," + trainDeparture.getDelay() + ",")
+          .forEach(data::add);
       Files.write(finishedDocument, data);
     }
   }
