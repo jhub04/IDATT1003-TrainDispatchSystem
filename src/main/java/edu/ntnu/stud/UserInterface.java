@@ -102,7 +102,7 @@ public class UserInterface {
       try {
         System.out.println("Enter train number: ");
         int trainNumber = Integer.parseInt(input.nextLine());
-        if (register.searchByTrainNumber(trainNumber) != null) {
+        if (register.trainNumberExistsInCsv(trainNumber)) {
           System.out.println("Error: A train with number " + trainNumber + " already exists.");
           continue;
         }
