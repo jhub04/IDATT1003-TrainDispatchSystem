@@ -45,7 +45,7 @@ public class TrainDepartureRegister {
 
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
-    if (searchByTrainNumber(trainNumber) != null) {
+    if (trainNumberExistsInCsv(trainNumber)) {
       throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
     }
     if (departureTime.isBefore(systemTime)) {
@@ -81,7 +81,7 @@ public class TrainDepartureRegister {
    */
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
-    if (searchByTrainNumber(trainNumber) != null) {
+    if (trainNumberExistsInCsv(trainNumber)) {
       throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
     }
     if (departureTime.isBefore(systemTime)) {
@@ -102,6 +102,19 @@ public class TrainDepartureRegister {
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
+  }
+
+  public boolean trainNumberExistsInCsv(int trainNumber) {
+    try {
+      if (!dataHandler.trainNumberExistsInCsv(trainNumber, pathOfFile,
+          fileName)) {
+        System.out.println("A train with number " + trainNumber + " already exists.");
+        return false;
+      }
+    } catch (IOException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
+    return true;
   }
 
   /**
