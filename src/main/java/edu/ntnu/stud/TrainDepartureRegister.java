@@ -106,10 +106,6 @@ public class TrainDepartureRegister {
    */
 
   public void removeDeparture(int trainNumber) {
-    if (searchByTrainNumber(trainNumber) == null) {
-      throw new IllegalArgumentException("A train with that number doesn't exist");
-    }
-
     try {
       register.remove(searchByTrainNumber(trainNumber));
       dataHandler.removeDepartureFromCsv(trainNumber, "src/main/java/edu/ntnu/stud", "Departures.csv");
@@ -155,6 +151,11 @@ public class TrainDepartureRegister {
     register.forEach(departure -> {
       if (departure.getTrainNumber() == trainNumber) {
         departure.setTrack(track);
+        try {
+          dataHandler.updateDepartureToCsv(departure, "src/main/java/edu/ntnu/stud", "Departures.csv");
+        } catch (IOException e) {
+          System.out.println("Error updating CSV file: " + e.getMessage());
+        }
       }
     });
   }
@@ -169,6 +170,11 @@ public class TrainDepartureRegister {
     register.forEach(departure -> {
       if (departure.getTrainNumber() == trainNumber) {
         departure.setDelay(delay);
+        try {
+          dataHandler.updateDepartureToCsv(departure, "src/main/java/edu/ntnu/stud", "Departures.csv");
+        } catch (IOException e) {
+          System.out.println("Error updating CSV file: " + e.getMessage());
+        }
       }
     });
   }
