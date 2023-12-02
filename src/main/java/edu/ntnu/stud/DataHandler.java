@@ -33,6 +33,8 @@ public class DataHandler {
    * @param fileName        the name of the file
    * @throws IOException if the file already exists
    */
+
+  // Methods that create or write to a csv file
   public void makeCsv(TrainDepartureRegister registerToWrite, String pathOfFile,
       String fileName)
       throws IOException {
@@ -51,56 +53,6 @@ public class DataHandler {
       }
       Files.write(finishedDocument, data);
     }
-  }
-
-  /**
-   * Reads a csv file and adds the departures to a register.
-   *
-   * @param departures the departures to add
-   * @param pathOfFile the path of the csv file
-   * @param fileName   the name of the csv file
-   * @throws IOException if the file does not exist
-   */
-
-  public List<TrainDeparture> readCsv(List<TrainDeparture> departures, String pathOfFile,
-      String fileName) throws IOException {
-    Path path = Paths.get(pathOfFile, fileName);
-    if (!Files.exists(path)) {
-      throw new IOException(FILE_DOES_NOT_EXIST + path);
-    }
-
-    try (Stream<String> lines = Files.lines(path)) {
-      List<String[]> departuresList = lines
-          .filter(line -> !line.trim().isEmpty())
-          .map(line -> line.split(","))
-          .toList();
-
-      for (int i = 1; i < departuresList.size(); i++) {
-        String[] departureData = departuresList.get(i);
-
-        if (departureData.length != 6) {
-          System.out.println("Skipping invalid line: " + Arrays.toString(departureData));
-          continue;
-        }
-
-        try {
-          LocalTime departureTime = LocalTime.parse(departureData[0]);
-          String line = departureData[1];
-          int trainNumber = Integer.parseInt(departureData[2]);
-          String destination = departureData[3];
-          int track = Integer.parseInt(departureData[4]);
-          LocalTime delay = LocalTime.parse(departureData[5]);
-
-          departures.add(
-              new TrainDeparture(departureTime, line, trainNumber, destination, track, delay));
-        } catch (DateTimeParseException | NumberFormatException e) {
-          System.out.println(
-              ERROR + "parsing line " + (i + 1) + ": " + Arrays.toString(departureData));
-        }
-      }
-    }
-
-    return departures;
   }
 
   /**
@@ -195,6 +147,58 @@ public class DataHandler {
     }
 
     Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
+  }
+
+  // Methods that read or scans a csv file
+
+  /**
+   * Reads a csv file and adds the departures to a register.
+   *
+   * @param departures the departures to add
+   * @param pathOfFile the path of the csv file
+   * @param fileName   the name of the csv file
+   * @throws IOException if the file does not exist
+   */
+
+  public List<TrainDeparture> readCsv(List<TrainDeparture> departures, String pathOfFile,
+      String fileName) throws IOException {
+    Path path = Paths.get(pathOfFile, fileName);
+    if (!Files.exists(path)) {
+      throw new IOException(FILE_DOES_NOT_EXIST + path);
+    }
+
+    try (Stream<String> lines = Files.lines(path)) {
+      List<String[]> departuresList = lines
+          .filter(line -> !line.trim().isEmpty())
+          .map(line -> line.split(","))
+          .toList();
+
+      for (int i = 1; i < departuresList.size(); i++) {
+        String[] departureData = departuresList.get(i);
+
+        if (departureData.length != 6) {
+          System.out.println("Skipping invalid line: " + Arrays.toString(departureData));
+          continue;
+        }
+
+        try {
+          LocalTime departureTime = LocalTime.parse(departureData[0]);
+          String line = departureData[1];
+          int trainNumber = Integer.parseInt(departureData[2]);
+          String destination = departureData[3];
+          int track = Integer.parseInt(departureData[4]);
+          LocalTime delay = LocalTime.parse(departureData[5]);
+
+          departures.add(
+              new TrainDeparture(departureTime, line, trainNumber, destination, track, delay));
+        } catch (DateTimeParseException | NumberFormatException e) {
+          System.out.println(
+              ERROR + "parsing line " + (i + 1) + ": " + Arrays.toString(departureData));
+        }
+      }
+    }
+
+    return departures;
   }
 
 
