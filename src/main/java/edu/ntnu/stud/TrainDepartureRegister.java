@@ -201,17 +201,10 @@ public class TrainDepartureRegister {
    * Sets the system time.
    *
    * @param time the time to set
-   * @return true if the time was set, false if the time is before the current system time.
    */
-  public boolean setSystemTime(LocalTime time) {
-    if (time.isBefore(systemTime)) {
-      return false;
-    } else {
-      removeDeparturesBefore(time);
-      systemTime = time;
-    }
-    return true;
-
+  public void setSystemTime(LocalTime time) {
+    removeDeparturesBefore(time);
+    systemTime = time;
   }
 
   // Methods related to searching the register
@@ -297,7 +290,6 @@ public class TrainDepartureRegister {
    */
 
   // Methods related to reading, writing and scanning of the CSV file
-
   public void readData() {
     try {
       this.register = dataHandler.readCsv(register, PATH_OF_FILE,
