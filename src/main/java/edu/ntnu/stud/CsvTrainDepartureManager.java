@@ -24,6 +24,8 @@ public class CsvTrainDepartureManager {
 
   private static final String FILE_DOES_NOT_EXIST = "File does not exist: ";
   private static final String ERROR = "Error ";
+  private static final String CSV_HEADER = "Departure time,Line,Train number,Destination,Track,Delay";
+  private static final int DEPARTURE_DATA_LENGTH = 6;
 
   // Methods that create or write to a csv file
 
@@ -46,7 +48,7 @@ public class CsvTrainDepartureManager {
       throw new IOException("This file already exists. Try with another name");
     } else {
       Path finishedDocument = Files.createFile(path);
-      data.add("Departure time,Line,Train number,Destination,Track,Delay");
+      data.add(CSV_HEADER);
       registerToWrite.getDepartures().stream()
           .map(trainDeparture -> trainDeparture.getDepartureTime() + "," + trainDeparture.getLine()
               + ","
@@ -75,7 +77,7 @@ public class CsvTrainDepartureManager {
 
     if (!Files.exists(path)) {
       Files.write(path,
-          Collections.singletonList("Departure time,Line,Train number,Destination,Track,Delay"),
+          Collections.singletonList(CSV_HEADER),
           StandardOpenOption.CREATE);
     }
 
@@ -177,7 +179,7 @@ public class CsvTrainDepartureManager {
       for (int i = 1; i < departuresList.size(); i++) {
         String[] departureData = departuresList.get(i);
 
-        if (departureData.length != 6) {
+        if (departureData.length != DEPARTURE_DATA_LENGTH) {
           System.out.println("Skipping invalid line: " + Arrays.toString(departureData));
           continue;
         }
