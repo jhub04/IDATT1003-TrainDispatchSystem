@@ -9,18 +9,18 @@ import java.util.stream.Collectors;
 
 
 /**
- * This class represents a register of train departures.
+ * This class represents a register of TrainDeparture objects.
  *
  * @author Jonathan Hubertz
- * @version 0.6
+ * @version 1.0
  * @since 30. october 2023
  */
 public class TrainDepartureRegister {
 
   private List<TrainDeparture> register;
-  private LocalTime systemTime;
 
   private final CsvTrainDepartureManager csvHandler = new CsvTrainDepartureManager();
+  private LocalTime systemTime;
 
   private static final String PATH_OF_FILE = "src/main/resources/";
   private static final String FILE_NAME = "Departures.csv";
@@ -39,7 +39,7 @@ public class TrainDepartureRegister {
   /**
    * Gets the system time.
    *
-   * @return the system time
+   * @return the system time.
    */
 
   public LocalTime getSystemTime() {
@@ -47,39 +47,32 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * Sorts the train departures by departure time.
+   * Sorts the train departures by ascending departure times.
    *
-   * @return a sorted list of train departures by the departure time.
+   * @return a sorted list of train departures.
    */
   public List<TrainDeparture> getDepartures() {
     register.sort(Comparator.comparing(TrainDeparture::getDepartureTime));
     return register;
   }
 
-  /**
-   * The number of departures in the register.
-   *
-   * @return the number of departures in the register.
-   */
-  public int getNumberOfDepartures() {
-    return register.size();
-  }
-
   // Methods for adding departures to the register
 
   /**
-   * This method adds a train departure without a set track to the register.
+   * Adds a train departure without a set track to the permanent register.
    *
-   * @param departureTime the departure time
-   * @param line          the line
-   * @param trainNumber   the train number
-   * @param destination   the destination
-   * @param delay         the delay
+   * @param departureTime the departure time.
+   * @param line          the line.
+   * @param trainNumber   the train number.
+   * @param destination   the destination.
+   * @param delay         the delay.
+   * @throws IllegalArgumentException if the train number already exists in the register.
+   * @throws IllegalArgumentException if the departure time is before the current system time.
    */
 
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, LocalTime delay) {
-    if (trainNumberExistsInCsv(trainNumber)) {
+    if (trainNumberExistsInPerm(trainNumber)) {
       throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
     }
     if (departureTime.isBefore(systemTime)) {
@@ -91,26 +84,28 @@ public class TrainDepartureRegister {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, delay);
       register.add(newDeparture);
-      writeDepartureToCsv(newDeparture);
+      writeDepartureToPerm(newDeparture);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      System.out.println(ERROR + e.getMessage());
     }
 
   }
 
   /**
-   * This method adds a train departure with a set track to the register.
+   * Adds a train departure with a set track to the permanent register.
    *
-   * @param departureTime the departure time
-   * @param line          the line
-   * @param trainNumber   the train number
-   * @param destination   the destination
-   * @param track         the track
-   * @param delay         the delay
+   * @param departureTime the departure time.
+   * @param line          the line.
+   * @param trainNumber   the train number.
+   * @param destination   the destination.
+   * @param track         the track.
+   * @param delay         the delay.
+   * @throws IllegalArgumentException if the train number already exists in the register.
+   * @throws IllegalArgumentException if the departure time is before the current system time.
    */
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
       String destination, int track, LocalTime delay) {
-    if (trainNumberExistsInCsv(trainNumber)) {
+    if (trainNumberExistsInPerm(trainNumber)) {
       throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
     }
     if (departureTime.isBefore(systemTime)) {
@@ -122,20 +117,19 @@ public class TrainDepartureRegister {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, track, delay);
       register.add(newDeparture);
-      writeDepartureToCsv(newDeparture);
+      writeDepartureToPerm(newDeparture);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      System.out.println(ERROR + e.getMessage());
     }
   }
 
   // Methods related to removing departures from the register
 
   /**
-   * Removes a departure from the register.
+   * Removes a departure from the permanent register.
    *
    * @param trainNumber the train number to remove.
    */
-
   public void removeDeparture(int trainNumber) {
     try {
       register.remove(searchByTrainNumber(trainNumber));
@@ -147,7 +141,8 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * Removes train departures with a departure time before the given time.
+   * Removes train departures with a departure time before the given time from the temporary
+   * register.
    *
    * @param time the time to remove train departures before.
    */
@@ -158,10 +153,10 @@ public class TrainDepartureRegister {
   // Setters
 
   /**
-   * This method sets the track of a train departure.
+   * Sets the track of a train departure.
    *
-   * @param trainNumber the train number
-   * @param track       the track
+   * @param trainNumber the train number.
+   * @param track       the track.
    */
   public void setTrack(int trainNumber, int track) {
     register.forEach(departure -> {
@@ -171,17 +166,17 @@ public class TrainDepartureRegister {
           csvHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
               FILE_NAME);
         } catch (IOException e) {
-          System.out.println(ERROR + "didn't update CSV file: " + e.getMessage());
+          System.out.println(ERROR + "didn't update CSV file");
         }
       }
     });
   }
 
   /**
-   * This method sets the delay of a train departure.
+   * Sets the delay of a train departure.
    *
-   * @param trainNumber the train number
-   * @param delay       the delay
+   * @param trainNumber the train number.
+   * @param delay       the delay.
    */
   public void setDelay(int trainNumber, LocalTime delay) {
     register.forEach(departure -> {
@@ -191,7 +186,7 @@ public class TrainDepartureRegister {
           csvHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
               FILE_NAME);
         } catch (IOException e) {
-          System.out.println(ERROR + "didn't update CSV file: " + e.getMessage());
+          System.out.println(ERROR + "didn't update CSV file");
         }
       }
     });
@@ -200,7 +195,7 @@ public class TrainDepartureRegister {
   /**
    * Sets the system time.
    *
-   * @param time the time to set
+   * @param time the time to set.
    */
   public void setSystemTime(LocalTime time) {
     removeDeparturesBefore(time);
@@ -210,10 +205,10 @@ public class TrainDepartureRegister {
   // Methods related to searching the register
 
   /**
-   * This method retrieves a train departure from the register by train number.
+   * Retrieves a train departure from the temporary register by train number.
    *
-   * @param trainNumber the train number
-   * @return the train departure with the given train number, or null if it does not exist.
+   * @param trainNumber the train number.
+   * @return the TrainDeparture object with the given train number, or null if it doesn't exist.
    */
   public TrainDeparture searchByTrainNumber(int trainNumber) {
     return register.stream()
@@ -223,9 +218,9 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * This method retrieves a list of train departures from the register by destination.
+   * Retrieves a list of train departures from the temporary register by destination.
    *
-   * @param destination the destination
+   * @param destination the destination.
    * @return a list of train departures with the given destination, or an empty list if none exist.
    */
   public List<TrainDeparture> searchByDestination(String destination) {
@@ -237,9 +232,10 @@ public class TrainDepartureRegister {
   // Methods related to string representations of the register
 
   /**
-   * A string representation of a train departure with the given train number.
+   * A string representation of a train departure with a given train number that exists in the
+   * temporary register.
    *
-   * @param trainNumber the train number
+   * @param trainNumber the train number.
    * @return a string representation of a train departure with the given train number.
    */
   public String searchByTrainNumberString(int trainNumber) {
@@ -252,7 +248,8 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * A string representation of train departures with the given destination.
+   * A string representation of train departures with the given destination in the temporary
+   * register.
    *
    * @param destination the destination
    * @return a string representation of train departures with the given destination.
@@ -270,9 +267,8 @@ public class TrainDepartureRegister {
     }
   }
 
-
   /**
-   * A string representation of the register.
+   * A string representation of the temporary register.
    *
    * @return a string representation of the register.
    */
@@ -285,11 +281,23 @@ public class TrainDepartureRegister {
     return formatDepartures() + newDepartures;
   }
 
+  // Method only used for testing
+
   /**
-   * This method reads data from a csv file.
+   * The number of departures in the temporary register.
+   *
+   * @return the number of departures in the register.
    */
 
-  // Methods related to reading, writing and scanning of the CSV file
+  public int getNumberOfDepartures() {
+    return register.size();
+  }
+
+  // Methods related to reading, writing and scanning of the permanent register
+
+  /**
+   * Reads the permanent register.
+   */
   public void readData() {
     try {
       this.register = csvHandler.readCsv(register, PATH_OF_FILE,
@@ -300,26 +308,12 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * This method writes a train departure to a csv file.
-   *
-   * @param departure the departure to write to file
-   */
-  private void writeDepartureToCsv(TrainDeparture departure) {
-    try {
-      csvHandler.writeDepartureToCsv(departure, PATH_OF_FILE,
-          FILE_NAME);
-    } catch (IOException e) {
-      System.out.println(ERROR + e.getMessage());
-    }
-  }
-
-  /**
-   * This method checks if a train number exists in the register.
+   * Checks if a train number exists in the permanent register.
    *
    * @param trainNumber the train number.
-   * @return true if the train number exists in the register, false if not.
+   * @return true if the train number exists in the permanent register, false if not.
    */
-  public boolean trainNumberExistsInCsv(int trainNumber) {
+  public boolean trainNumberExistsInPerm(int trainNumber) {
     try {
       if (csvHandler.trainNumberExistsInCsv(trainNumber, PATH_OF_FILE,
           FILE_NAME)) {
@@ -331,12 +325,26 @@ public class TrainDepartureRegister {
     return false;
   }
 
+  /**
+   * Writes a train departure to the permanent register.
+   *
+   * @param departure the departure to write.
+   */
+  private void writeDepartureToPerm(TrainDeparture departure) {
+    try {
+      csvHandler.writeDepartureToCsv(departure, PATH_OF_FILE,
+          FILE_NAME);
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
+  }
+
   // Helper method
 
   /**
    * The formatting of the header and separator of the string representations.
    *
-   * @return the header and separator.
+   * @return the formatting of the string represention.
    */
   private String formatDepartures() {
     String time = "\nTime: " + systemTime.toString() + "\n";

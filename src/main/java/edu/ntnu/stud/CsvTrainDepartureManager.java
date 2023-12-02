@@ -25,16 +25,17 @@ public class CsvTrainDepartureManager {
   private static final String FILE_DOES_NOT_EXIST = "File does not exist: ";
   private static final String ERROR = "Error ";
 
-  /**
-   * Creates a csv file and Writes a register of departures to it.
-   *
-   * @param registerToWrite the register to write to file
-   * @param pathOfFile      the path of the file
-   * @param fileName        the name of the file
-   * @throws IOException if the file already exists
-   */
-
   // Methods that create or write to a csv file
+
+  /**
+   * Creates a new csv file and writes the TrainDeparture objects in the TrainDepartureRegister to
+   * it.
+   *
+   * @param registerToWrite the register to write to file.
+   * @param pathOfFile      the path of the file.
+   * @param fileName        the name of the file.
+   * @throws IOException if the file already exists.
+   */
   public void makeCsv(TrainDepartureRegister registerToWrite, String pathOfFile,
       String fileName)
       throws IOException {
@@ -57,14 +58,13 @@ public class CsvTrainDepartureManager {
   }
 
   /**
-   * Writes a single departure to a csv file.
+   * Writes a single new TrainDeparture object to the csv file.
    *
-   * @param departure  the departure to write to file
-   * @param pathOfFile the path of the file
-   * @param fileName   the name of the file
-   * @throws IOException if the file already exists
+   * @param departure  the departure to write to file.
+   * @param pathOfFile the path of the file.
+   * @param fileName   the name of the file.
+   * @throws IOException if the file already exists.
    */
-
   public void writeDepartureToCsv(TrainDeparture departure, String pathOfFile,
       String fileName)
       throws IOException {
@@ -86,12 +86,12 @@ public class CsvTrainDepartureManager {
   }
 
   /**
-   * Removes a departure from a csv file.
+   * Removes a TrainDeparture object from the csv file.
    *
-   * @param trainNumber the train number to remove
-   * @param pathOfFile  the path of the csv file
-   * @param fileName    the name of the csv file
-   * @throws IOException if the file does not exist
+   * @param trainNumber the train number of the departure to remove.
+   * @param pathOfFile  the path of the csv file.
+   * @param fileName    the name of the csv file.
+   * @throws IOException if the file does not exist.
    */
   public void removeDepartureFromCsv(int trainNumber, String pathOfFile, String fileName)
       throws IOException {
@@ -113,14 +113,14 @@ public class CsvTrainDepartureManager {
   }
 
   /**
-   * Updates the values of a departure to the csv file.
+   * Updates the values of a TrainDeparture object to the csv file.
    *
-   * @param updatedDeparture the updated departure
-   * @param pathOfFile       the path of the csv file
-   * @param fileName         the name of the csv file
+   * @param departure  the TrainDeparture object that's to be updated.
+   * @param pathOfFile the path of the csv file
+   * @param fileName   the name of the csv file
    * @throws IOException if the file does not exist
    */
-  public void updateDepartureToCsv(TrainDeparture updatedDeparture, String pathOfFile,
+  public void updateDepartureToCsv(TrainDeparture departure, String pathOfFile,
       String fileName) throws IOException {
     Path path = Paths.get(pathOfFile, fileName);
     if (!Files.exists(path)) {
@@ -128,10 +128,10 @@ public class CsvTrainDepartureManager {
     }
 
     String updatedLine =
-        updatedDeparture.getDepartureTime() + "," + updatedDeparture.getLine() + ","
-            + updatedDeparture.getTrainNumber() + ","
-            + updatedDeparture.getDestination() + "," + updatedDeparture.getTrack() + ","
-            + updatedDeparture.getDelay();
+        departure.getDepartureTime() + "," + departure.getLine() + ","
+            + departure.getTrainNumber() + ","
+            + departure.getDestination() + "," + departure.getTrack() + ","
+            + departure.getDelay();
 
     List<String> lines;
     try (Stream<String> stream = Files.lines(path)) {
@@ -139,7 +139,7 @@ public class CsvTrainDepartureManager {
           .map(line -> {
             String[] fields = line.split(",");
             if (fields.length > 2 && fields[2].equals(
-                String.valueOf(updatedDeparture.getTrainNumber()))) {
+                String.valueOf(departure.getTrainNumber()))) {
               return updatedLine;
             }
             return line;
@@ -153,12 +153,12 @@ public class CsvTrainDepartureManager {
   // Methods that read or scans a csv file
 
   /**
-   * Reads a csv file and adds the departures to a register.
+   * Reads the csv file and adds the TrainDeparture object to the TrainDepartureRegister object.
    *
-   * @param departures the departures to add
-   * @param pathOfFile the path of the csv file
-   * @param fileName   the name of the csv file
-   * @throws IOException if the file does not exist
+   * @param departures the departures to add.
+   * @param pathOfFile the path of the csv file.
+   * @param fileName   the name of the csv file.
+   * @throws IOException if the file does not exist.
    */
 
   public List<TrainDeparture> readCsv(List<TrainDeparture> departures, String pathOfFile,
@@ -204,11 +204,11 @@ public class CsvTrainDepartureManager {
 
 
   /**
-   * Checks if a train number exists in a csv file.
+   * Checks if a train number exists in the csv file.
    *
-   * @param trainNumber the train number to check
-   * @param pathOfFile  the path of the csv file
-   * @param fileName    the name of the csv file
+   * @param trainNumber the train number to check.
+   * @param pathOfFile  the path of the csv file.
+   * @param fileName    the name of the csv file.
    * @return true if the train number exists in the csv file, false otherwise.
    * @throws IOException if the file does not exist
    */

@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This is the user interface class for the train dispatch application.
+ * This is the user interface class for the TrainDispatchApp class.
  *
  * @author Jonathan Hübertz
  * @version 0.1
@@ -25,6 +25,8 @@ public class UserInterface {
   private static final String INVALID_TIME_FORMAT = "Invalid time format. Please try again.";
   private static final String INVALID_NUMBER_FORMAT = "Invalid number format. Please try again.";
   private static final String ERROR = "Error: ";
+
+  // Constructor
 
   /**
    * Constructor for UserInterface.
@@ -72,7 +74,6 @@ public class UserInterface {
   /**
    * Sets the track of a train departure.
    */
-
   public void setTrack() {
     int trainNumber = collectTrainNumberDoesExist();
     int track = collectTrack();
@@ -94,7 +95,6 @@ public class UserInterface {
   /**
    * Sets the delay of a train departure.
    */
-
   public void setDelay() {
     int trainNumber = collectTrainNumberDoesExist();
     LocalTime delay = collectDelay();
@@ -113,9 +113,8 @@ public class UserInterface {
   }
 
   /**
-   * Sets the system time .
+   * Sets the system time.
    */
-
   public void setSystemTime() {
     LocalTime systemTime = collectSystemTime();
     register.setSystemTime(systemTime);
@@ -137,7 +136,6 @@ public class UserInterface {
   /**
    * Searches for train departures by destination in the temporary register.
    */
-
   public void searchByDestination() {
     String destination = collectDestination();
     System.out.println(register.searchByDestinationString(destination));
@@ -147,16 +145,15 @@ public class UserInterface {
   // Methods for displaying data
 
   /**
-   * This method displays all the train departures in the temporary register.
+   * Displays all the train departures in the temporary register.
    */
   public void displayDepartures() {
     System.out.println(register);
   }
 
   /**
-   * Displays the menu.
+   * Displays the menu of options that a user can choose from.
    */
-
   public void displayMenu() {
     System.out.println("[1] Display all departures");
     System.out.println("[2] Add departure");
@@ -172,8 +169,7 @@ public class UserInterface {
   // Methods for initializing and starting the user interface
 
   /**
-   * This method initializes the user interface, reads data from the permanent register and displays
-   * them.
+   * Initializes the user interface.
    */
   public void init() {
     System.out.println("\nWelcome to the train dispatch application!\n");
@@ -182,9 +178,8 @@ public class UserInterface {
   }
 
   /**
-   * This method starts the user interface and handles the user input.
+   * Starts the user interface and handles the user input.
    */
-
   public void start() {
     boolean running = true;
     while (running) {
@@ -294,7 +289,7 @@ public class UserInterface {
       System.out.println("Enter train number: ");
       try {
         int trainNumber = Integer.parseInt(input.nextLine());
-        if ((trainNumber >= 0 && trainNumber <= 999) && !register.trainNumberExistsInCsv(
+        if ((trainNumber >= 0 && trainNumber <= 999) && !register.trainNumberExistsInPerm(
             trainNumber)) {
           return trainNumber;
         } else {

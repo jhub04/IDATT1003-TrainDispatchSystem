@@ -1,6 +1,5 @@
 package edu.ntnu.stud;
 
-import java.time.DateTimeException;
 import java.time.LocalTime;
 
 /**
@@ -8,10 +7,9 @@ import java.time.LocalTime;
  * the departure time, line, train number, destination, track and delay of a train
  *
  * @author Jonathan Hubertz
- * @version 0.8
+ * @version 1.0
  * @since 30. october 2023
  */
-
 public class TrainDeparture {
 
   private final LocalTime departureTime;
@@ -24,15 +22,17 @@ public class TrainDeparture {
   // Constructors
 
   /**
-   * Constructor for TrainDeparture without set track.
+   * Constructor for TrainDeparture without initial track.
    *
    * @param departureTime the departure time. Immutable once initialized.
    * @param line          the line. Immutable once initialized.
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param delay         the delay. Mutable.
-   * @throws IllegalArgumentException if departure, delay, line or destination is null or empty, or
-   *                                  if trainNumber is not a positive integer.
+   * @throws IllegalArgumentException if departure is null.
+   * @throws IllegalArgumentException if delay is null.
+   * @throws IllegalArgumentException if line is null or an empty String.
+   * @throws IllegalArgumentException if destination is null or an empty String.
    */
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) {
@@ -61,19 +61,19 @@ public class TrainDeparture {
   }
 
   /**
-   * Constructor for TrainDeparture with set track.
+   * Constructor for TrainDeparture with initial track.
    *
    * @param departureTime the departure time. Immutable once initialized.
    * @param line          the line. Immutable once initialized.
    * @param trainNumber   the train number. Immutable once initialized.
    * @param destination   the destination. Immutable once initialized.
    * @param track         the track. Mutable.
-   * @param delay         the delay. Mutable. if departure, delay, line or destination is null or
-   *                      empty, or if trainNumber is not a positive integer.
-   * @throws IllegalArgumentException if departure, delay, line or destination is null or empty, or
-   *                                  if trainNumber is not a positive integer.
+   * @param delay         the delay. Mutable.
+   * @throws IllegalArgumentException if departure is null.
+   * @throws IllegalArgumentException if delay is null.
+   * @throws IllegalArgumentException if line is null or an empty String.
+   * @throws IllegalArgumentException if destination is null or an empty String.
    */
-
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       int track, LocalTime delay) {
     if (departureTime == null) {
@@ -105,7 +105,7 @@ public class TrainDeparture {
   /**
    * Gets the departure time of the train.
    *
-   * @return the departure time (LocalTime).
+   * @return the departure time.
    */
   public LocalTime getDepartureTime() {
     return departureTime;
@@ -114,7 +114,7 @@ public class TrainDeparture {
   /**
    * Gets the line of the train.
    *
-   * @return the line (String).
+   * @return the line.
    */
   public String getLine() {
     return line;
@@ -123,7 +123,7 @@ public class TrainDeparture {
   /**
    * Gets the train number.
    *
-   * @return the train number (int).
+   * @return the train number.
    */
   public int getTrainNumber() {
     return trainNumber;
@@ -132,7 +132,7 @@ public class TrainDeparture {
   /**
    * Gets the destination of the train.
    *
-   * @return the destination (String).
+   * @return the destination.
    */
   public String getDestination() {
     return destination;
@@ -141,7 +141,7 @@ public class TrainDeparture {
   /**
    * Gets the track of the train.
    *
-   * @return the track (int).
+   * @return the track.
    */
   public int getTrack() {
     return track;
@@ -150,7 +150,7 @@ public class TrainDeparture {
   /**
    * Gets the delay of the train.
    *
-   * @return the delay (LocalTime).
+   * @return the delay.
    */
   public LocalTime getDelay() {
     return delay;
@@ -161,8 +161,7 @@ public class TrainDeparture {
   /**
    * Sets the track of the train.
    *
-   * @param track the track (int).
-   * @throws IllegalArgumentException if track is not a positive integer.
+   * @param track the track.
    */
   public void setTrack(int track) {
     this.track = track;
@@ -171,8 +170,7 @@ public class TrainDeparture {
   /**
    * Sets the delay of the train.
    *
-   * @param delay the delay (LocalTime).
-   * @throws DateTimeException if delay is a negative time.
+   * @param delay the delay.
    */
   public void setDelay(LocalTime delay) {
     this.delay = delay;
@@ -183,14 +181,14 @@ public class TrainDeparture {
   /**
    * Gets the departure time with the delay added.
    *
-   * @return the updated departure time (LocalTime).
+   * @return the updated departure time.
    */
   public LocalTime getDepartureTimeWithDelay() {
     return departureTime.plusHours(delay.getHour()).plusMinutes(delay.getMinute());
   }
 
   /**
-   * Provides a string representation of a TrainDeparture object.
+   * String representation of a TrainDeparture object.
    *
    * @return A string detailing the information about the departure.
    */

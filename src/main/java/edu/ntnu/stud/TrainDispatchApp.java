@@ -10,7 +10,7 @@ package edu.ntnu.stud;
 public class TrainDispatchApp {
 
   /**
-   * This is the main method of the application.
+   * Runs the application.
    *
    * @param args The command line arguments.
    */
