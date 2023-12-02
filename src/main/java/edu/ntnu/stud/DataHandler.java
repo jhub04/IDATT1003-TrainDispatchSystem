@@ -130,6 +130,13 @@ public class DataHandler {
 
   }
 
+  /**
+   * Removes a departure from a csv file.
+   * @param trainNumber the train number to remove
+   * @param pathOfFile the path of the csv file
+   * @param fileName the name of the csv file
+   * @throws IOException if the file does not exist
+   */
   public void removeDepartureFromCsv(int trainNumber, String pathOfFile, String fileName)
       throws IOException {
     Path path = Paths.get(pathOfFile + "/" + fileName);
@@ -170,6 +177,15 @@ public class DataHandler {
     Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
   }
 
+  /**
+   * Checks if a train number exists in a csv file.
+   *
+   * @param trainNumber the train number to check
+   * @param pathOfFile the path of the csv file
+   * @param fileName the name of the csv file
+   * @return true if the train number exists in the csv file, false otherwise.
+   * @throws IOException if the file does not exist
+   */
   public boolean trainNumberExistsInCsv(int trainNumber, String pathOfFile, String fileName)
       throws IOException {
     Path path = Paths.get(pathOfFile + "/" + fileName);
