@@ -1,12 +1,12 @@
 package edu.ntnu.stud;
 
 import java.time.LocalTime;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.regex.Pattern;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is the user interface class for the train dispatch application.
@@ -22,6 +22,10 @@ public class UserInterface {
   private final Scanner input;
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
+  private static final String INVALID_TIME_FORMAT = "Invalid time format. Please try again.";
+  private static final String INVALID_NUMBER_FORMAT = "Invalid number format. Please try again.";
+  private static final String ERROR = "Error: ";
+
   /**
    * Constructor for UserInterface.
    */
@@ -32,14 +36,14 @@ public class UserInterface {
 
 
   /**
-   * This method displays all the train departures in the register.
+   * This method displays all the train departures in the temporary register.
    */
   public void displayDepartures() {
     System.out.println(register);
   }
 
   /**
-   * Adds a train departure to the register.
+   * Adds a train departure to the permanent register.
    */
   public void addDeparture() {
     LocalTime departureTime = collectDepartureTime();
@@ -55,159 +59,13 @@ public class UserInterface {
       System.out.println("Train departure successfully added.");
       displayDepartures();
     } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
+      System.out.println(ERROR + e.getMessage());
     }
   }
 
-
-  private LocalTime collectDepartureTime() {
-    while (true) {
-      try {
-        System.out.println("Enter departure time (hh:mm): ");
-        LocalTime departureTime = LocalTime.parse(input.nextLine(), formatter);
-        if (departureTime.isBefore(register.getSystemTime())) {
-          System.out.println("Cannot assign a train departure time before the current time.");
-        } else {
-          return departureTime;
-        }
-      } catch (DateTimeParseException e) {
-        System.out.println("Invalid time format. Please try again.");
-      }
-    }
-  }
-
-  private String collectLine() {
-    Pattern pattern = Pattern.compile("^[A-Z]+[0-9]+$");
-
-    while (true) {
-      System.out.println(
-          "Enter line (Uppercase letter(s) followed by number(s). e.g., L1, RE11): ");
-      String line = input.nextLine();
-      if (!line.trim().isEmpty()) {
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
-          return line;
-        } else {
-          System.out.println(
-              "Invalid format. Please enter the line in the correct format (e.g., L1, RE11).");
-        }
-      } else {
-        System.out.println("Input cannot be empty. Please try again.");
-      }
-    }
-  }
-
-  private int collectTrainNumberDoesntExist() {
-    while (true) {
-      try {
-        System.out.println("Enter train number: ");
-        int trainNumber = Integer.parseInt(input.nextLine());
-        if (register.trainNumberExistsInCsv(trainNumber)) {
-          System.out.println("Error: A train departure with number " + trainNumber
-              + " already exists or has existed.");
-          continue;
-        }
-        if (trainNumber < 0 || trainNumber > 999) {
-          System.out.println("Error: Train number must be between 0 and 999.");
-          continue;
-        }
-        return trainNumber;
-      } catch (NumberFormatException e) {
-        System.out.println("Invalid number format. Please try again.");
-      }
-    }
-  }
-
-  private int collectTrainNumberDoesExist() {
-    while (true) {
-      try {
-        System.out.println("Enter train number: ");
-        int trainNumber = Integer.parseInt(input.nextLine());
-        if (register.searchByTrainNumber(trainNumber) == null) {
-          System.out.println("Error: A train departure with number " + trainNumber
-              + " doesn't exist or has existed.");
-          continue;
-        }
-        return trainNumber;
-
-      } catch (NumberFormatException e) {
-        System.out.println("Invalid number format. Please try again.");
-      }
-    }
-  }
-
-  private String collectDestination() {
-    while (true) {
-      try {
-        System.out.println("Enter destination: ");
-        String destination = input.nextLine().toLowerCase();
-        if (!destination.trim().isEmpty()) {
-          return destination;
-        }
-        System.out.println("Input cannot be empty. Please try again.");
-      } catch (NumberFormatException e) {
-        System.out.println("Invalid number format. Please try again.");
-      }
-
-    }
-  }
-
-  private int collectTrack() {
-    while (true) {
-      try {
-        System.out.println("Enter track [optional]: ");
-        String trackString = input.nextLine();
-        if (trackString.trim().isEmpty()) {
-          return -1;
-        }
-        int track = Integer.parseInt(trackString);
-        if (track <= 0 || track > 99) {
-          System.out.println("Error: Track must be between 0 and 99.");
-        } else {
-          return track;
-        }
-      } catch (NumberFormatException e) {
-        System.out.println("Invalid number format. Please try again.");
-      }
-    }
-  }
-
-  private LocalTime collectDelay() {
-    while (true) {
-      try {
-        System.out.println("Enter delay [optional] (hh:mm): ");
-        String delayString = input.nextLine();
-        if (delayString.trim().isEmpty()) {
-          return LocalTime.of(0, 0);
-        }
-        LocalTime delay = LocalTime.parse(delayString, formatter);
-        if (delay.isBefore(LocalTime.of(0, 0))) {
-          System.out.println("Error: Delay cannot be negative.");
-        } else {
-          return delay;
-        }
-      } catch (DateTimeParseException e) {
-        System.out.println("Invalid time format. Please try again.");
-      }
-    }
-  }
-
-  private LocalTime collectSystemTime() {
-    while (true) {
-      try {
-        System.out.println("Enter system time (hh:mm): ");
-        LocalTime systemTime = LocalTime.parse(input.nextLine(), formatter);
-        if (systemTime.isBefore(register.getSystemTime())) {
-          System.out.println("Cannot set system time before current time.");
-        } else {
-          return systemTime;
-        }
-      } catch (DateTimeParseException e) {
-        System.out.println("Invalid time format. Please try again.");
-      }
-    }
-  }
-
+  /**
+   * Removes a train departure from the permanent register.
+   */
   public void removeDeparture() {
     int trainNumber = collectTrainNumberDoesExist();
 
@@ -233,7 +91,7 @@ public class UserInterface {
 
       displayDepartures();
     } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
+      System.out.println(ERROR + e.getMessage());
     }
   }
 
@@ -254,13 +112,13 @@ public class UserInterface {
       }
       displayDepartures();
     } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
+      System.out.println(ERROR + e.getMessage());
     }
   }
 
 
   /**
-   * Searches for a train departure by train number.
+   * Searches for a train departure by train number in the temporary register.
    */
   public void searchByTrainNumber() {
     int trainNumber = collectTrainNumberDoesExist();
@@ -269,7 +127,7 @@ public class UserInterface {
   }
 
   /**
-   * Searches for train departures by destination.
+   * Searches for train departures by destination in the temporary register.
    */
 
   public void searchByDestination() {
@@ -279,7 +137,7 @@ public class UserInterface {
   }
 
   /**
-   * Sets the system time.
+   * Sets the system time .
    */
 
   public void setSystemTime() {
@@ -305,10 +163,22 @@ public class UserInterface {
     System.out.println("[9] Exit");
   }
 
+
   /**
-   * Gets the user input.
+   * This method initializes the user interface, reads data from the permanent register and displays
+   * them.
    */
-  public void getUserInput() {
+  public void init() {
+    System.out.println("\nWelcome to the train dispatch application!\n");
+    register.readData();
+    displayDepartures();
+  }
+
+  /**
+   * This method starts the user interface and handles the user input.
+   */
+
+  public void start() {
     boolean running = true;
     while (running) {
       displayMenu();
@@ -346,28 +216,201 @@ public class UserInterface {
             running = false;
             break;
           default:
-            System.out.println("Invalid input. Please try again.");
+            System.out.println(ERROR + "Invalid input. Please try again.");
             break;
         }
       } catch (InputMismatchException e) {
-        System.out.println("Invalid input. Please try again.");
+        System.out.println(ERROR + "Invalid input. Please try again.");
         input.nextLine();
       }
     }
   }
 
   /**
-   * This method initializes the user interface.
+   * Collects a valid departure time from the user.
+   *
+   * @return the departure time.
    */
-  public void init() {
-    register.readData();
-    displayDepartures();
+  private LocalTime collectDepartureTime() {
+    while (true) {
+      try {
+        System.out.println("Enter departure time (hh:mm): ");
+        LocalTime departureTime = LocalTime.parse(input.nextLine(), formatter);
+        if (departureTime.isBefore(register.getSystemTime())) {
+          System.out.println(ERROR + "Cannot assign a train departure time before the current time.");
+        } else {
+          return departureTime;
+        }
+      } catch (DateTimeParseException e) {
+        System.out.println(INVALID_TIME_FORMAT);
+      }
+    }
   }
 
   /**
-   * This method starts the user interface and checks that it's working properly.
+   * Collects a valid line from the user.
+   *
+   * @return the line.
    */
-  public void start() {
-    getUserInput();
+  private String collectLine() {
+    Pattern pattern = Pattern.compile("^[A-Z]+\\d+$");
+
+    while (true) {
+      System.out.println(
+          "Enter line (Uppercase letter(s) followed by number(s). e.g., L1, RE11): ");
+      String line = input.nextLine();
+      if (!line.trim().isEmpty()) {
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+          return line;
+        } else {
+          System.out.println(
+              ERROR + "Invalid format. Please enter the line in the correct format (e.g., L1, RE11).");
+        }
+      } else {
+        System.out.println(ERROR + "Input cannot be empty. Please try again.");
+      }
+    }
+  }
+
+  /**
+   * Collects a valid train number that doesn't exist in the permanent register.
+   *
+   * @return the train number.
+   */
+  private int collectTrainNumberDoesntExist() {
+    while (true) {
+      System.out.println("Enter train number: ");
+      try {
+        int trainNumber = Integer.parseInt(input.nextLine());
+        if ((trainNumber >= 0 && trainNumber <= 999) && !register.trainNumberExistsInCsv(trainNumber)) {
+          return trainNumber;
+        } else {
+          if (trainNumber < 0 || trainNumber > 999) {
+            System.out.println(ERROR + "Train number must be between 0 and 999.");
+          } else {
+            System.out.println(ERROR + "A train departure with number " + trainNumber
+                + " already exists or has existed.");
+          }
+        }
+      } catch (NumberFormatException e) {
+        System.out.println(INVALID_NUMBER_FORMAT);
+      }
+    }
+  }
+
+  /**
+   * Collects a valid train number that exists in the temporary register.
+   *
+   * @return the train number.
+   */
+  private int collectTrainNumberDoesExist() {
+    while (true) {
+      try {
+        System.out.println("Enter train number: ");
+        int trainNumber = Integer.parseInt(input.nextLine());
+        if (register.searchByTrainNumber(trainNumber) == null) {
+          System.out.println(ERROR + "A train departure with number " + trainNumber
+              + " doesn't exist or has existed.");
+          continue;
+        }
+        return trainNumber;
+
+      } catch (NumberFormatException e) {
+        System.out.println(INVALID_NUMBER_FORMAT);
+      }
+    }
+  }
+
+  /**
+   * Collects a valid destination from the user.
+   *
+   * @return the destination.
+   */
+  private String collectDestination() {
+    while (true) {
+      try {
+        System.out.println("Enter destination: ");
+        String destination = input.nextLine().toLowerCase();
+        if (!destination.trim().isEmpty()) {
+          return destination;
+        }
+        System.out.println(ERROR + "Input cannot be empty. Please try again.");
+      } catch (NumberFormatException e) {
+        System.out.println(INVALID_NUMBER_FORMAT);
+      }
+
+    }
+  }
+
+  /**
+   * Collects a valid track from the user.
+   *
+   * @return the track.
+   */
+  private int collectTrack() {
+    while (true) {
+      try {
+        System.out.println("Enter track [optional]: ");
+        String trackString = input.nextLine();
+        if (trackString.trim().isEmpty()) {
+          return -1;
+        }
+        int track = Integer.parseInt(trackString);
+        if (track <= 0 || track > 99) {
+          System.out.println(ERROR + "Track must be between 0 and 99.");
+        } else {
+          return track;
+        }
+      } catch (NumberFormatException e) {
+        System.out.println(INVALID_NUMBER_FORMAT);
+      }
+    }
+  }
+
+  /**
+   * Collects a valid delay from the user.
+   *
+   * @return the delay.
+   */
+  private LocalTime collectDelay() {
+    while (true) {
+      try {
+        System.out.println("Enter delay [optional] (hh:mm): ");
+        String delayString = input.nextLine();
+        if (delayString.trim().isEmpty()) {
+          return LocalTime.of(0, 0);
+        }
+        LocalTime delay = LocalTime.parse(delayString, formatter);
+        if (delay.isBefore(LocalTime.of(0, 0))) {
+          System.out.println(ERROR + "Delay cannot be negative.");
+        } else {
+          return delay;
+        }
+      } catch (DateTimeParseException e) {
+        System.out.println(INVALID_TIME_FORMAT);
+      }
+    }
+  }
+
+  /**
+   * Collects a valid system time from the user.
+   *
+   * @return the system time.
+   */
+  private LocalTime collectSystemTime() {
+    while (true) {
+      try {
+        System.out.println("Enter system time (hh:mm): ");
+        LocalTime systemTime = LocalTime.parse(input.nextLine(), formatter);
+        if (systemTime.isBefore(register.getSystemTime())) {
+          System.out.println(ERROR + "Cannot set system time before current time.");
+        } else {
+          return systemTime;
+        }
+      } catch (DateTimeParseException e) {
+        System.out.println(INVALID_TIME_FORMAT);
+      }
+    }
   }
 }
