@@ -20,6 +20,9 @@ public class TrainDepartureRegister {
   private List<TrainDeparture> register;
   private LocalTime systemTime;
 
+  private final String pathOfFile = "src/main/java/edu/ntnu/stud";
+  private final String fileName = "Departures.csv";
+
   private final DataHandler dataHandler = new DataHandler();
 
   /**
@@ -55,8 +58,8 @@ public class TrainDepartureRegister {
           destination, delay);
       register.add(newDeparture);
       try {
-        dataHandler.writeDepartureToCsv(newDeparture, "src/main/java/edu/ntnu/stud",
-            "Departures.csv");
+        dataHandler.writeDepartureToCsv(newDeparture, pathOfFile,
+            fileName);
       } catch (IOException e) {
         System.out.println("Error: " + e.getMessage());
       }
@@ -91,8 +94,8 @@ public class TrainDepartureRegister {
           destination, track, delay);
       register.add(newDeparture);
       try {
-        dataHandler.writeDepartureToCsv(newDeparture, "src/main/java/edu/ntnu/stud",
-            "Departures.csv");
+        dataHandler.writeDepartureToCsv(newDeparture, pathOfFile,
+            fileName);
       } catch (IOException e) {
         System.out.println("Error: " + e.getMessage());
       }
@@ -108,7 +111,8 @@ public class TrainDepartureRegister {
   public void removeDeparture(int trainNumber) {
     try {
       register.remove(searchByTrainNumber(trainNumber));
-      dataHandler.removeDepartureFromCsv(trainNumber, "src/main/java/edu/ntnu/stud", "Departures.csv");
+      dataHandler.removeDepartureFromCsv(trainNumber, pathOfFile,
+          fileName);
     } catch (IOException e) {
       System.out.println("Error" + e.getMessage());
     }
@@ -152,7 +156,8 @@ public class TrainDepartureRegister {
       if (departure.getTrainNumber() == trainNumber) {
         departure.setTrack(track);
         try {
-          dataHandler.updateDepartureToCsv(departure, "src/main/java/edu/ntnu/stud", "Departures.csv");
+          dataHandler.updateDepartureToCsv(departure, pathOfFile,
+              fileName);
         } catch (IOException e) {
           System.out.println("Error updating CSV file: " + e.getMessage());
         }
@@ -171,7 +176,8 @@ public class TrainDepartureRegister {
       if (departure.getTrainNumber() == trainNumber) {
         departure.setDelay(delay);
         try {
-          dataHandler.updateDepartureToCsv(departure, "src/main/java/edu/ntnu/stud", "Departures.csv");
+          dataHandler.updateDepartureToCsv(departure, pathOfFile,
+              fileName);
         } catch (IOException e) {
           System.out.println("Error updating CSV file: " + e.getMessage());
         }
@@ -263,8 +269,8 @@ public class TrainDepartureRegister {
 
   public void readData() {
     try {
-      this.register = dataHandler.readCsv(register, "src/main/java/edu/ntnu/stud",
-          "Departures.csv");
+      this.register = dataHandler.readCsv(register, pathOfFile,
+          fileName);
     } catch (IOException e) {
       System.out.println("Error: " + e.getMessage());
     }
