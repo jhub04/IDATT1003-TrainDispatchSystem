@@ -20,9 +20,9 @@ public class TrainDepartureRegister {
   private List<TrainDeparture> register;
   private LocalTime systemTime;
 
-  private final DataHandler dataHandler = new DataHandler();
+  private final CsvTrainDepartureManager csvHandler = new CsvTrainDepartureManager();
 
-  private static final String PATH_OF_FILE = "src/main/java/edu/ntnu/stud/";
+  private static final String PATH_OF_FILE = "src/main/resources/";
   private static final String FILE_NAME = "Departures.csv";
   private static final String ERROR = "Error: ";
 
@@ -139,7 +139,7 @@ public class TrainDepartureRegister {
   public void removeDeparture(int trainNumber) {
     try {
       register.remove(searchByTrainNumber(trainNumber));
-      dataHandler.removeDepartureFromCsv(trainNumber, PATH_OF_FILE,
+      csvHandler.removeDepartureFromCsv(trainNumber, PATH_OF_FILE,
           FILE_NAME);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
@@ -168,7 +168,7 @@ public class TrainDepartureRegister {
       if (departure.getTrainNumber() == trainNumber) {
         departure.setTrack(track);
         try {
-          dataHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
+          csvHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
               FILE_NAME);
         } catch (IOException e) {
           System.out.println(ERROR + "didn't update CSV file: " + e.getMessage());
@@ -188,7 +188,7 @@ public class TrainDepartureRegister {
       if (departure.getTrainNumber() == trainNumber) {
         departure.setDelay(delay);
         try {
-          dataHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
+          csvHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
               FILE_NAME);
         } catch (IOException e) {
           System.out.println(ERROR + "didn't update CSV file: " + e.getMessage());
@@ -292,7 +292,7 @@ public class TrainDepartureRegister {
   // Methods related to reading, writing and scanning of the CSV file
   public void readData() {
     try {
-      this.register = dataHandler.readCsv(register, PATH_OF_FILE,
+      this.register = csvHandler.readCsv(register, PATH_OF_FILE,
           FILE_NAME);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
@@ -306,7 +306,7 @@ public class TrainDepartureRegister {
    */
   private void writeDepartureToCsv(TrainDeparture departure) {
     try {
-      dataHandler.writeDepartureToCsv(departure, PATH_OF_FILE,
+      csvHandler.writeDepartureToCsv(departure, PATH_OF_FILE,
           FILE_NAME);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
@@ -321,7 +321,7 @@ public class TrainDepartureRegister {
    */
   public boolean trainNumberExistsInCsv(int trainNumber) {
     try {
-      if (dataHandler.trainNumberExistsInCsv(trainNumber, PATH_OF_FILE,
+      if (csvHandler.trainNumberExistsInCsv(trainNumber, PATH_OF_FILE,
           FILE_NAME)) {
         return true;
       }

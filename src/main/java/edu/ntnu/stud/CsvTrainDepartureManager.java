@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  * @version 0.1
  * @since 1. december 2023
  */
-public class DataHandler {
+public class CsvTrainDepartureManager {
 
   private static final String FILE_DOES_NOT_EXIST = "File does not exist: ";
   private static final String ERROR = "Error ";
