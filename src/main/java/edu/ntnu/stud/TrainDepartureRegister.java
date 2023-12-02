@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * This class represents a register of train departures.
  *
  * @author Jonathan Hubertz
- * @version 0.4
+ * @version 0.6
  * @since 30. october 2023
  */
 public class TrainDepartureRegister {
@@ -20,10 +20,11 @@ public class TrainDepartureRegister {
   private List<TrainDeparture> register;
   private LocalTime systemTime;
 
-  private static final String pathOfFile = "src/main/java/edu/ntnu/stud";
-  private static final String fileName = "Departures.csv";
-
   private final DataHandler dataHandler = new DataHandler();
+
+  private static final String PATH_OF_FILE = "src/main/java/edu/ntnu/stud/";
+  private static final String FILE_NAME = "Departures.csv";
+  private static final String ERROR = "Error: ";
 
   /**
    * Constructor for TrainDepartureRegister.
@@ -32,6 +33,39 @@ public class TrainDepartureRegister {
     this.register = new ArrayList<>();
     this.systemTime = LocalTime.of(12, 0);
   }
+
+  // Getters
+
+  /**
+   * Gets the system time.
+   *
+   * @return the system time
+   */
+
+  public LocalTime getSystemTime() {
+    return systemTime;
+  }
+
+  /**
+   * Sorts the train departures by departure time.
+   *
+   * @return a sorted list of train departures by the departure time.
+   */
+  public List<TrainDeparture> getDepartures() {
+    register.sort(Comparator.comparing(TrainDeparture::getDepartureTime));
+    return register;
+  }
+
+  /**
+   * The number of departures in the register.
+   *
+   * @return the number of departures in the register.
+   */
+  public int getNumberOfDepartures() {
+    return register.size();
+  }
+
+  // Methods for adding departures to the register
 
   /**
    * This method adds a train departure without a set track to the register.
@@ -57,12 +91,7 @@ public class TrainDepartureRegister {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, delay);
       register.add(newDeparture);
-      try {
-        dataHandler.writeDepartureToCsv(newDeparture, pathOfFile,
-            fileName);
-      } catch (IOException e) {
-        System.out.println("Error: " + e.getMessage());
-      }
+      writeDepartureToCsv(newDeparture);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
@@ -93,56 +122,79 @@ public class TrainDepartureRegister {
       TrainDeparture newDeparture = new TrainDeparture(departureTime, line, trainNumber,
           destination, track, delay);
       register.add(newDeparture);
-      try {
-        dataHandler.writeDepartureToCsv(newDeparture, pathOfFile,
-            fileName);
-      } catch (IOException e) {
-        System.out.println("Error: " + e.getMessage());
-      }
+      writeDepartureToCsv(newDeparture);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
   }
 
-  /**
-   * This method checks if a train number exists in the register.
-   * @param trainNumber the train number
-   * @return true if the train number exists in the register, false if not.
-   */
-  public boolean trainNumberExistsInCsv(int trainNumber) {
-    try {
-      if (dataHandler.trainNumberExistsInCsv(trainNumber, pathOfFile,
-          fileName)) {
-        return true;
-      }
-    } catch (IOException e) {
-      System.out.println("Error: " + e.getMessage());
-    }
-    return false;
-  }
+  // Methods related to removing departures from the register
 
   /**
-   * Removes a departure from the register
+   * Removes a departure from the register.
+   *
+   * @param trainNumber the train number to remove.
    */
 
   public void removeDeparture(int trainNumber) {
     try {
       register.remove(searchByTrainNumber(trainNumber));
-      dataHandler.removeDepartureFromCsv(trainNumber, pathOfFile,
-          fileName);
+      dataHandler.removeDepartureFromCsv(trainNumber, PATH_OF_FILE,
+          FILE_NAME);
     } catch (IOException e) {
-      System.out.println("Error" + e.getMessage());
+      System.out.println(ERROR + e.getMessage());
     }
   }
 
   /**
-   * Gets the system time.
+   * Removes train departures with a departure time before the given time.
    *
-   * @return the system time
+   * @param time the time to remove train departures before.
    */
+  public void removeDeparturesBefore(LocalTime time) {
+    register.removeIf(departure -> departure.getDepartureTimeWithDelay().isBefore(time));
+  }
 
-  public LocalTime getSystemTime() {
-    return systemTime;
+  // Setters
+
+  /**
+   * This method sets the track of a train departure.
+   *
+   * @param trainNumber the train number
+   * @param track       the track
+   */
+  public void setTrack(int trainNumber, int track) {
+    register.forEach(departure -> {
+      if (departure.getTrainNumber() == trainNumber) {
+        departure.setTrack(track);
+        try {
+          dataHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
+              FILE_NAME);
+        } catch (IOException e) {
+          System.out.println(ERROR + "didn't update CSV file: " + e.getMessage());
+        }
+      }
+    });
+  }
+
+  /**
+   * This method sets the delay of a train departure.
+   *
+   * @param trainNumber the train number
+   * @param delay       the delay
+   */
+  public void setDelay(int trainNumber, LocalTime delay) {
+    register.forEach(departure -> {
+      if (departure.getTrainNumber() == trainNumber) {
+        departure.setDelay(delay);
+        try {
+          dataHandler.updateDepartureToCsv(departure, PATH_OF_FILE,
+              FILE_NAME);
+        } catch (IOException e) {
+          System.out.println(ERROR + "didn't update CSV file: " + e.getMessage());
+        }
+      }
+    });
   }
 
   /**
@@ -162,45 +214,7 @@ public class TrainDepartureRegister {
 
   }
 
-  /**
-   * This method sets the track of a train departure.
-   *
-   * @param trainNumber the train number
-   * @param track       the track
-   */
-  public void setTrack(int trainNumber, int track) {
-    register.forEach(departure -> {
-      if (departure.getTrainNumber() == trainNumber) {
-        departure.setTrack(track);
-        try {
-          dataHandler.updateDepartureToCsv(departure, pathOfFile,
-              fileName);
-        } catch (IOException e) {
-          System.out.println("Error updating CSV file: " + e.getMessage());
-        }
-      }
-    });
-  }
-
-  /**
-   * This method sets the delay of a train departure.
-   *
-   * @param trainNumber the train number
-   * @param delay       the delay
-   */
-  public void setDelay(int trainNumber, LocalTime delay) {
-    register.forEach(departure -> {
-      if (departure.getTrainNumber() == trainNumber) {
-        departure.setDelay(delay);
-        try {
-          dataHandler.updateDepartureToCsv(departure, pathOfFile,
-              fileName);
-        } catch (IOException e) {
-          System.out.println("Error updating CSV file: " + e.getMessage());
-        }
-      }
-    });
-  }
+  // Methods related to searching the register
 
   /**
    * This method retrieves a train departure from the register by train number.
@@ -227,47 +241,7 @@ public class TrainDepartureRegister {
         .toList();
   }
 
-  /**
-   * Removes train departures with a departure time before the given time.
-   *
-   * @param time the time to remove train departures before.
-   */
-  public void removeDeparturesBefore(LocalTime time) {
-    register.removeIf(departure -> departure.getDepartureTimeWithDelay().isBefore(time));
-  }
-
-  /**
-   * Sorts the train departures by departure time.
-   *
-   * @return a sorted list of train departures by the departure time.
-   */
-  public List<TrainDeparture> getDepartures() {
-    register.sort(Comparator.comparing(TrainDeparture::getDepartureTime));
-    return register;
-  }
-
-  /**
-   * The number of departures in the register.
-   *
-   * @return the number of departures in the register.
-   */
-  public int getNumberOfDepartures() {
-    return register.size();
-  }
-
-  /**
-   * The formatting of the header and separator of the string representations.
-   *
-   * @return the header and separator.
-   */
-  private String formatDepartures() {
-    String time = "\nTime: " + systemTime.toString() + "\n";
-    String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "Nr", "Departure Time", "Destination", "Track", "Delay");
-    String separator = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
-        "----", "---------------", "------------------", "-----", "-----");
-    return time + header + separator;
-  }
+  // Methods related to string representations of the register
 
   /**
    * A string representation of a train departure with the given train number.
@@ -281,15 +255,6 @@ public class TrainDepartureRegister {
       return "No train departures with train number " + trainNumber + " found.";
     } else {
       return formatDepartures() + departure;
-    }
-  }
-
-  public void readData() {
-    try {
-      this.register = dataHandler.readCsv(register, pathOfFile,
-          fileName);
-    } catch (IOException e) {
-      System.out.println("Error: " + e.getMessage());
     }
   }
 
@@ -318,7 +283,6 @@ public class TrainDepartureRegister {
    *
    * @return a string representation of the register.
    */
-
   @Override
   public String toString() {
     String newDepartures = getDepartures().stream()
@@ -328,5 +292,67 @@ public class TrainDepartureRegister {
     return formatDepartures() + newDepartures;
   }
 
+  /**
+   * This method reads data from a csv file.
+   */
+
+  // Methods related to reading, writing and scanning of the CSV file
+
+  public void readData() {
+    try {
+      this.register = dataHandler.readCsv(register, PATH_OF_FILE,
+          FILE_NAME);
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
+  }
+
+  /**
+   * This method writes a train departure to a csv file.
+   *
+   * @param departure the departure to write to file
+   */
+  private void writeDepartureToCsv(TrainDeparture departure) {
+    try {
+      dataHandler.writeDepartureToCsv(departure, PATH_OF_FILE,
+          FILE_NAME);
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
+  }
+
+  /**
+   * This method checks if a train number exists in the register.
+   *
+   * @param trainNumber the train number.
+   * @return true if the train number exists in the register, false if not.
+   */
+  public boolean trainNumberExistsInCsv(int trainNumber) {
+    try {
+      if (dataHandler.trainNumberExistsInCsv(trainNumber, PATH_OF_FILE,
+          FILE_NAME)) {
+        return true;
+      }
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
+    return false;
+  }
+
+  // Helper method
+
+  /**
+   * The formatting of the header and separator of the string representations.
+   *
+   * @return the header and separator.
+   */
+  private String formatDepartures() {
+    String time = "\nTime: " + systemTime.toString() + "\n";
+    String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "Nr", "Departure Time", "Destination", "Track", "Delay");
+    String separator = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
+        "----", "---------------", "------------------", "-----", "-----");
+    return time + header + separator;
+  }
 
 }
