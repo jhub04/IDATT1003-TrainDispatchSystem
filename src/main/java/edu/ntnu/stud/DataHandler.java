@@ -143,4 +143,30 @@ public class DataHandler {
 
     Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
   }
+
+  public void updateDepartureToCsv(TrainDeparture updatedDeparture, String pathOfFile,
+      String fileName) throws IOException {
+    Path path = Paths.get(pathOfFile + "/" + fileName);
+    if (!Files.exists(path)) {
+      throw new IOException("File does not exist: " + path);
+    }
+
+    String updatedLine =
+        updatedDeparture.getDepartureTime() + "," + updatedDeparture.getLine() + ","
+            + updatedDeparture.getTrainNumber() + ","
+            + updatedDeparture.getDestination() + "," + updatedDeparture.getTrack() + ","
+            + updatedDeparture.getDelay() + ",";
+
+    List<String> lines = Files.lines(path)
+        .map(line -> {
+          String[] fields = line.split(",");
+          if (fields.length > 2 && fields[2].equals(String.valueOf(updatedDeparture.getTrainNumber()))) {
+            return updatedLine;
+          }
+          return line;
+        })
+        .toList();
+
+    Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
+  }
 }
