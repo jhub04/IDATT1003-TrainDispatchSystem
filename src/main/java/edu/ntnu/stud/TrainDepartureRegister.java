@@ -104,17 +104,21 @@ public class TrainDepartureRegister {
     }
   }
 
+  /**
+   * This method checks if a train number exists in the register.
+   * @param trainNumber the train number
+   * @return true if the train number exists in the register, false if not.
+   */
   public boolean trainNumberExistsInCsv(int trainNumber) {
     try {
-      if (!dataHandler.trainNumberExistsInCsv(trainNumber, pathOfFile,
+      if (dataHandler.trainNumberExistsInCsv(trainNumber, pathOfFile,
           fileName)) {
-        System.out.println("A train with number " + trainNumber + " already exists.");
-        return false;
+        return true;
       }
     } catch (IOException e) {
       System.out.println("Error: " + e.getMessage());
     }
-    return true;
+    return false;
   }
 
   /**
