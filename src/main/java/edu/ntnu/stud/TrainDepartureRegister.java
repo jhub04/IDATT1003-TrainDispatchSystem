@@ -337,6 +337,7 @@ public class TrainDepartureRegister {
    */
   public void readData() {
     try {
+      this.register.clear();
       this.register = csvHandler.readCsv(register, pathOfFile,
           fileName);
     } catch (IOException e) {
