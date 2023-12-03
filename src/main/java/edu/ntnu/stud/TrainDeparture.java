@@ -18,9 +18,6 @@ public class TrainDeparture {
   private final String destination;
   private int track;
   private LocalTime delay;
-
-  private static final String ERROR = "Error: ";
-
   // Constructors
 
   /**
@@ -39,19 +36,19 @@ public class TrainDeparture {
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) {
     if (departureTime == null) {
-      throw new IllegalArgumentException(ERROR + "departure time cannot be null");
+      throw new IllegalArgumentException("departure time cannot be null");
     }
     if (delay == null) {
-      throw new IllegalArgumentException(ERROR + "delay cannot be null");
+      throw new IllegalArgumentException("delay cannot be null");
     }
     if (line == null || line.trim().isEmpty()) {
-      throw new IllegalArgumentException(ERROR + "line cannot be null or empty");
+      throw new IllegalArgumentException("line cannot be null or empty");
     }
     if (destination == null || destination.trim().isEmpty()) {
-      throw new IllegalArgumentException(ERROR + "destination cannot be null or empty");
+      throw new IllegalArgumentException("destination cannot be null or empty");
     }
     if (trainNumber <= 0 || trainNumber > 999) {
-      throw new IllegalArgumentException(ERROR + "train number must be between 1 and 999");
+      throw new IllegalArgumentException("train number must be between 1 and 999");
     }
 
     this.departureTime = departureTime;
@@ -79,22 +76,22 @@ public class TrainDeparture {
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       int track, LocalTime delay) {
     if (departureTime == null) {
-      throw new IllegalArgumentException(ERROR + "departure time cannot be null");
+      throw new IllegalArgumentException("departure time cannot be null");
     }
     if (delay == null) {
-      throw new IllegalArgumentException(ERROR + "delay cannot be null");
+      throw new IllegalArgumentException("delay cannot be null");
     }
     if (line == null || line.trim().isEmpty()) {
-      throw new IllegalArgumentException(ERROR + "line cannot be null or empty");
+      throw new IllegalArgumentException("line cannot be null or empty");
     }
     if (destination == null || destination.trim().isEmpty()) {
-      throw new IllegalArgumentException(ERROR + "destination cannot be null or empty");
+      throw new IllegalArgumentException("destination cannot be null or empty");
     }
     if (trainNumber <= 0 || trainNumber > 999) {
-      throw new IllegalArgumentException(ERROR + "train number must be between 1 and 999");
+      throw new IllegalArgumentException("train number must be between 1 and 999");
     }
     if (track <= 0 || track > 99) {
-      throw new IllegalArgumentException(ERROR + "track must be between 1 and 99");
+      throw new IllegalArgumentException("track must be between 1 and 99");
     }
 
     this.departureTime = departureTime;
@@ -171,7 +168,7 @@ public class TrainDeparture {
    */
   public void setTrack(int track) throws IllegalArgumentException {
     if (track <= 0 || track > 99) {
-      throw new IllegalArgumentException(ERROR + "track must be between 1 and 99");
+      throw new IllegalArgumentException("track must be between 1 and 99");
     }
     this.track = track;
   }
