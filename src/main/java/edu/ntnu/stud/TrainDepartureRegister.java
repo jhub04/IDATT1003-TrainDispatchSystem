@@ -295,7 +295,7 @@ public class TrainDepartureRegister {
     return formatDepartures() + newDepartures;
   }
 
-  // Method only used for testing
+  // Methods used for testing
 
   /**
    * The number of departures in the temporary register.
@@ -303,8 +303,20 @@ public class TrainDepartureRegister {
    * @return the number of departures in the register.
    */
 
-  public int getNumberOfDepartures() {
+  int getNumberOfDepartures() {
     return register.size();
+  }
+
+  /**
+   * Removes all the departures from the permanent register
+   */
+
+  void flushPermRegister() {
+    try {
+      csvHandler.flushCsv(PATH_OF_FILE, FILE_NAME);
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
   }
 
   // Methods related to reading, writing and scanning of the permanent register
