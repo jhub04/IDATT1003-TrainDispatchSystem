@@ -90,9 +90,6 @@ public class TrainDeparture {
     if (trainNumber <= 0 || trainNumber > 999) {
       throw new IllegalArgumentException("train number must be between 1 and 999");
     }
-    if (track <= 0 || track > 99) {
-      throw new IllegalArgumentException("track must be between 1 and 99");
-    }
 
     this.departureTime = departureTime;
     this.line = line;

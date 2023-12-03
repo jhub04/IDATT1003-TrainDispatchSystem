@@ -171,18 +171,5 @@ class TrainDepartureTest {
       assertThrows(IllegalArgumentException.class,
           () -> new TrainDeparture(departureTime, line, trainNumber, destination, delay));
     }
-
-
-    @ParameterizedTest
-    @ValueSource(ints = {-1, 0, 100})
-    void invalidTracks(int track) {
-      LocalTime departureTime = LocalTime.of(12, 0);
-      String line = "L1";
-      int trainNumber = 1;
-      String destination = "Spikkestad";
-      LocalTime delay = LocalTime.of(0, 0);
-      assertThrows(IllegalArgumentException.class,
-          () -> new TrainDeparture(departureTime, line, trainNumber, destination, track, delay));
-    }
   }
 }
