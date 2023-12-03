@@ -93,6 +93,9 @@ public class TrainDeparture {
     if (trainNumber <= 0 || trainNumber > 999) {
       throw new IllegalArgumentException(ERROR + "train number must be between 1 and 999");
     }
+    if (track <= 0 || track > 99) {
+      throw new IllegalArgumentException(ERROR + "track must be between 1 and 99");
+    }
 
     this.departureTime = departureTime;
     this.line = line;
@@ -164,8 +167,12 @@ public class TrainDeparture {
    * Sets the track of the train.
    *
    * @param track the track.
+   * @throws IllegalArgumentException if the track is not between 1 and 99.
    */
-  public void setTrack(int track) {
+  public void setTrack(int track) throws IllegalArgumentException {
+    if (track <= 0 || track > 99) {
+      throw new IllegalArgumentException(ERROR + "track must be between 1 and 99");
+    }
     this.track = track;
   }
 
