@@ -42,7 +42,7 @@ public class TrainDepartureRegister {
    * Default constructor for TrainDepartureRegister.
    */
   public TrainDepartureRegister() {
-    this("src/main/java/edu/ntnu/stud/", "Departures.csv");
+    this("src/main/resources/", "Departures.csv");
   }
 
   // Getters
