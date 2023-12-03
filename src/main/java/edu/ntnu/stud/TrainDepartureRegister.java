@@ -71,7 +71,7 @@ public class TrainDepartureRegister {
    */
 
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
-      String destination, LocalTime delay) {
+      String destination, LocalTime delay) throws IllegalArgumentException {
     if (trainNumberExistsInPerm(trainNumber)) {
       throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
     }
@@ -104,7 +104,7 @@ public class TrainDepartureRegister {
    * @throws IllegalArgumentException if the departure time is before the current system time.
    */
   public void addTrainDeparture(LocalTime departureTime, String line, int trainNumber,
-      String destination, int track, LocalTime delay) {
+      String destination, int track, LocalTime delay) throws IllegalArgumentException {
     if (trainNumberExistsInPerm(trainNumber)) {
       throw new IllegalArgumentException("A train with number " + trainNumber + " already exists.");
     }
@@ -372,7 +372,7 @@ public class TrainDepartureRegister {
    *
    * @return the formatting of the string representation.
    */
-  // Help from ChatGpt --
+  // Help from ChatGPT --
   private String formatDepartures() {
     String time = "\nTime: " + systemTime.toString() + "\n";
     String header = String.format("%-4s | %-15s | %-18s | %-5s | %-5s%n",
