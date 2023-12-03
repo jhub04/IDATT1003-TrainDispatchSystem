@@ -19,6 +19,8 @@ public class TrainDeparture {
   private int track;
   private LocalTime delay;
 
+  private static final String ERROR = "Error: ";
+
   // Constructors
 
   /**
@@ -37,19 +39,19 @@ public class TrainDeparture {
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       LocalTime delay) {
     if (departureTime == null) {
-      throw new IllegalArgumentException("Departure time cannot be null");
+      throw new IllegalArgumentException(ERROR + "departure time cannot be null");
     }
     if (delay == null) {
-      throw new IllegalArgumentException("Delay cannot be null");
+      throw new IllegalArgumentException(ERROR + "delay cannot be null");
     }
     if (line == null || line.trim().isEmpty()) {
-      throw new IllegalArgumentException("Line cannot be null or empty");
+      throw new IllegalArgumentException(ERROR + "line cannot be null or empty");
     }
     if (destination == null || destination.trim().isEmpty()) {
-      throw new IllegalArgumentException("Destination cannot be null or empty");
+      throw new IllegalArgumentException(ERROR + "destination cannot be null or empty");
     }
-    if (trainNumber <= 0) {
-      throw new IllegalArgumentException("Train number must be a positive integer");
+    if (trainNumber <= 0 || trainNumber > 999) {
+      throw new IllegalArgumentException(ERROR + "train number must be between 1 and 999");
     }
 
     this.departureTime = departureTime;
@@ -77,19 +79,19 @@ public class TrainDeparture {
   public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination,
       int track, LocalTime delay) {
     if (departureTime == null) {
-      throw new IllegalArgumentException("Departure time cannot be null");
+      throw new IllegalArgumentException(ERROR + "departure time cannot be null");
     }
     if (delay == null) {
-      throw new IllegalArgumentException("Delay cannot be null");
+      throw new IllegalArgumentException(ERROR + "delay cannot be null");
     }
     if (line == null || line.trim().isEmpty()) {
-      throw new IllegalArgumentException("Line cannot be null or empty");
+      throw new IllegalArgumentException(ERROR + "line cannot be null or empty");
     }
     if (destination == null || destination.trim().isEmpty()) {
-      throw new IllegalArgumentException("Destination cannot be null or empty");
+      throw new IllegalArgumentException(ERROR + "destination cannot be null or empty");
     }
-    if (trainNumber <= 0) {
-      throw new IllegalArgumentException("Train number must be a positive integer");
+    if (trainNumber <= 0 || trainNumber > 999) {
+      throw new IllegalArgumentException(ERROR + "train number must be between 1 and 999");
     }
 
     this.departureTime = departureTime;
@@ -193,6 +195,8 @@ public class TrainDeparture {
    * @return A string detailing the information about the departure.
    */
   @Override
+  // Help from ChatGPT
+  // --
   public String toString() {
     String trackStr = this.getTrack() == -1 ? "    " : String.format("%-5d", this.getTrack());
     String delayStr =
@@ -205,5 +209,6 @@ public class TrainDeparture {
         trackStr,
         delayStr);
   }
+  // --
 
 }
