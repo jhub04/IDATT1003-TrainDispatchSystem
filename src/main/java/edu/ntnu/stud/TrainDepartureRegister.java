@@ -22,16 +22,27 @@ public class TrainDepartureRegister {
   private final CsvTrainDepartureManager csvHandler = new CsvTrainDepartureManager();
   private LocalTime systemTime;
 
-  private static final String PATH_OF_FILE = "src/main/resources/";
-  private static final String FILE_NAME = "Departures.csv";
+  private final String pathOfFile;
+  private final String fileName;
   private static final String ERROR = "Error: ";
 
+  // Constructors
+
   /**
-   * Constructor for TrainDepartureRegister.
+   * Constructor with file path and name.
    */
-  public TrainDepartureRegister() {
+  public TrainDepartureRegister(String pathOfFile, String fileName) {
     this.register = new ArrayList<>();
     this.systemTime = LocalTime.of(12, 0);
+    this.pathOfFile = pathOfFile;
+    this.fileName = fileName;
+  }
+
+  /**
+   * Default constructor for TrainDepartureRegister.
+   */
+  public TrainDepartureRegister() {
+    this("src/main/java/edu/ntnu/stud/", "Departures.csv");
   }
 
   // Getters
@@ -133,8 +144,8 @@ public class TrainDepartureRegister {
   public void removeDeparture(int trainNumber) {
     try {
       register.remove(searchByTrainNumber(trainNumber));
-      csvHandler.removeDepartureFromCsv(trainNumber, PATH_OF_FILE,
-          FILE_NAME);
+      csvHandler.removeDepartureFromCsv(trainNumber, pathOfFile,
+          fileName);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
@@ -165,7 +176,7 @@ public class TrainDepartureRegister {
       if (departure.getTrainNumber() == trainNumber) {
         try {
           departure.setTrack(track);
-          csvHandler.updateDepartureToCsv(departure, PATH_OF_FILE, FILE_NAME);
+          csvHandler.updateDepartureToCsv(departure, pathOfFile, fileName);
           return;
         } catch (IOException e) {
           System.out.println(ERROR + "didn't update Csv file - " + e.getMessage());
@@ -191,7 +202,7 @@ public class TrainDepartureRegister {
       if (departure.getTrainNumber() == trainNumber) {
         try {
           departure.setDelay(delay);
-          csvHandler.updateDepartureToCsv(departure, PATH_OF_FILE, FILE_NAME);
+          csvHandler.updateDepartureToCsv(departure, pathOfFile, fileName);
           return;
         } catch (IOException e) {
           System.out.println(ERROR + "didn't update Csv file - " + e.getMessage());
@@ -308,12 +319,12 @@ public class TrainDepartureRegister {
   }
 
   /**
-   * Removes all the departures from the permanent register
+   * Removes all the departures from the permanent register.
    */
 
   void flushPermRegister() {
     try {
-      csvHandler.flushCsv(PATH_OF_FILE, FILE_NAME);
+      csvHandler.flushCsv(pathOfFile, fileName);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
@@ -326,8 +337,8 @@ public class TrainDepartureRegister {
    */
   public void readData() {
     try {
-      this.register = csvHandler.readCsv(register, PATH_OF_FILE,
-          FILE_NAME);
+      this.register = csvHandler.readCsv(register, pathOfFile,
+          fileName);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
@@ -341,8 +352,8 @@ public class TrainDepartureRegister {
    */
   public boolean trainNumberExistsInPerm(int trainNumber) {
     try {
-      if (csvHandler.trainNumberExistsInCsv(trainNumber, PATH_OF_FILE,
-          FILE_NAME)) {
+      if (csvHandler.trainNumberExistsInCsv(trainNumber, pathOfFile,
+          fileName)) {
         return true;
       }
     } catch (IOException e) {
@@ -358,8 +369,8 @@ public class TrainDepartureRegister {
    */
   private void writeDepartureToPerm(TrainDeparture departure) {
     try {
-      csvHandler.writeDepartureToCsv(departure, PATH_OF_FILE,
-          FILE_NAME);
+      csvHandler.writeDepartureToCsv(departure, pathOfFile,
+          fileName);
     } catch (IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
