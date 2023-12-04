@@ -66,8 +66,8 @@ class TrainDepartureRegisterTest {
 
   @Test
   void testSetSystemTime() {
-    register.setSystemTime(LocalTime.of(14, 0));
-    assertEquals(LocalTime.of(14, 0), register.getSystemTime());
+    register.setSystemTime(LocalTime.of(15, 0));
+    assertEquals(LocalTime.of(15, 0), register.getSystemTime());
     assertEquals(0, register.getDepartures().size());
   }
 
