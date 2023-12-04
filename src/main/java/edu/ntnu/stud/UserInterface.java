@@ -26,8 +26,6 @@ public class UserInterface {
   private static final String INVALID_NUMBER_FORMAT = "Invalid number format. Please try again.";
   private static final String ERROR = "Error: ";
 
-
-
   // Constructor
 
   /**
@@ -343,18 +341,21 @@ public class UserInterface {
    * @return the destination.
    */
   private String collectDestination() {
-    while (true) {
-      try {
-        System.out.println("Enter destination: ");
-        String destination = input.nextLine().toLowerCase();
-        if (!destination.trim().isEmpty()) {
-          return destination;
-        }
-        System.out.println(ERROR + "Input cannot be empty. Please try again.");
-      } catch (NumberFormatException e) {
-        System.out.println(INVALID_NUMBER_FORMAT);
-      }
+    Pattern pattern = Pattern.compile("^[a-zæøå]+$");
 
+    while (true) {
+      System.out.println("Enter destination: ");
+      String destination = input.nextLine().toLowerCase();
+      if (!destination.trim().isEmpty()) {
+        Matcher matcher = pattern.matcher(destination);
+        if (matcher.find()) {
+          return destination;
+        } else {
+          System.out.println(ERROR + "Invalid format. Please enter the destination in the correct format (e.g., Oslo S, Lillestrøm).");
+        }
+      } else {
+        System.out.println(ERROR + "Input cannot be empty. Please try again.");
+      }
     }
   }
 
