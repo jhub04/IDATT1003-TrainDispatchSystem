@@ -26,13 +26,15 @@ public class UserInterface {
   private static final String INVALID_NUMBER_FORMAT = "Invalid number format. Please try again.";
   private static final String ERROR = "Error: ";
 
+
+
   // Constructor
 
   /**
    * Constructor for UserInterface.
    */
-  public UserInterface() {
-    this.register = new TrainDepartureRegister();
+  public UserInterface(CsvTrainDeparturePersistence persistence) {
+    this.register = new TrainDepartureRegister(persistence);
     this.input = new Scanner(System.in);
   }
 

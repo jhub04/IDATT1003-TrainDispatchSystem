@@ -15,7 +15,8 @@ public class TrainDispatchApp {
    * @param args The command line arguments.
    */
   public static void main(String[] args) {
-    UserInterface ui = new UserInterface();
+    UserInterface ui = new UserInterface(
+        new CsvTrainDeparturePersistence("src/main/resources/", "departures.csv"));
     ui.init();
     ui.start();
   }

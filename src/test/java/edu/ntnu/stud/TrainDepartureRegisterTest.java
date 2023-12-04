@@ -11,7 +11,9 @@ class TrainDepartureRegisterTest {
 
   private final String testPath = "src/test/resources/";
   private final String testFile = "test.csv";
-  private final TrainDepartureRegister register = new TrainDepartureRegister(testPath, testFile);
+
+  private final CsvTrainDeparturePersistence csvTrainDeparturePersistence = new CsvTrainDeparturePersistence(testPath, testFile);
+  private final TrainDepartureRegister register = new TrainDepartureRegister(csvTrainDeparturePersistence);
 
   @BeforeEach
   void setUp() {
