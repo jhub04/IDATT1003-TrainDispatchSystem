@@ -48,6 +48,7 @@ class TrainDepartureRegisterTest {
 
   @Test
   void addDepartureBeforeSystemTime() {
+    register.setSystemTime(LocalTime.of(14, 0));
     assertThrows(IllegalArgumentException.class, () -> register.addTrainDeparture(
         LocalTime.of(11, 0), "L1", 3, "spikkestad", LocalTime.of(0, 0)));
   }
