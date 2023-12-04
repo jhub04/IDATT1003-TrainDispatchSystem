@@ -178,6 +178,8 @@ public class UserInterface {
   public void init() {
     System.out.println("\nWelcome to the train dispatch application!\n");
     register.readData();
+    LocalTime time = collectSystemTime();
+    register.setSystemTime(time);
     displayDepartures();
   }
 
