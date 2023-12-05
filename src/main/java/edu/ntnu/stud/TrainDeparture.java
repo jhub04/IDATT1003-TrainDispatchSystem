@@ -196,8 +196,7 @@ public class TrainDeparture {
    * @return A string detailing the information about the departure.
    */
   // Help from ChatGPT --
-  @Override
-  public String toString() {
+  public String toUiString() {
     String trackStr = this.getTrack() == -1 ? "    " : String.format("%-5d", this.getTrack());
     String delayStr =
         this.getDelay() == LocalTime.of(0, 0) ? "     " : String.format("%-5s", this.getDelay());
