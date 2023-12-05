@@ -1,5 +1,6 @@
 package edu.ntnu.stud;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -51,10 +52,14 @@ public class UserInterface {
 
     // Add the train departure
     try {
-      register.addTrainDeparture(departureTime, line, trainNumber, destination, track, delay);
+      if (track == -1) {
+        register.addTrainDeparture(departureTime, line, trainNumber, destination, delay);
+      } else {
+        register.addTrainDeparture(departureTime, line, trainNumber, destination, track, delay);
+      }
       System.out.println("Train departure successfully added.");
       displayDepartures();
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
   }
@@ -65,8 +70,15 @@ public class UserInterface {
   public void removeDeparture() {
     int trainNumber = collectTrainNumberDoesExist();
 
-    register.removeDeparture(trainNumber);
-    displayDepartures();
+    try {
+      register.removeDeparture(trainNumber);
+      displayDepartures();
+    } catch (IllegalArgumentException | IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    } finally {
+      System.out.println("Train departure successfully removed.");
+    }
+
   }
 
   // Setters
@@ -87,7 +99,7 @@ public class UserInterface {
       }
 
       displayDepartures();
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
   }
@@ -111,7 +123,7 @@ public class UserInterface {
         System.out.println("Delay successfully set for train " + trainNumber);
       }
       displayDepartures();
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException | IOException e) {
       System.out.println(ERROR + e.getMessage());
     }
   }
@@ -133,7 +145,11 @@ public class UserInterface {
    */
   public void searchByTrainNumber() {
     int trainNumber = collectTrainNumberDoesExist();
-    System.out.println(register.searchByTrainNumberString(trainNumber));
+    try {
+      System.out.println(register.searchByTrainNumberString(trainNumber));
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
 
   }
 
@@ -142,7 +158,11 @@ public class UserInterface {
    */
   public void searchByDestination() {
     String destination = collectDestination();
-    System.out.println(register.searchByDestinationString(destination));
+    try {
+      System.out.println(register.searchByDestinationString(destination));
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
 
   }
 
@@ -152,7 +172,11 @@ public class UserInterface {
    * Displays all the train departures in the temporary register.
    */
   public void displayDepartures() {
-    System.out.println(register);
+    try {
+      System.out.println(register.toSortedTable(register.getSystemTime()));
+    } catch (IOException e) {
+      System.out.println(ERROR + e.getMessage());
+    }
   }
 
   /**
@@ -177,7 +201,6 @@ public class UserInterface {
    */
   public void init() {
     System.out.println("\nWelcome to the train dispatch application!\n");
-    register.readData();
     LocalTime time = collectSystemTime();
     register.setSystemTime(time);
     displayDepartures();
@@ -295,8 +318,8 @@ public class UserInterface {
       System.out.println("Enter train number: ");
       try {
         int trainNumber = Integer.parseInt(input.nextLine());
-        if ((trainNumber >= 0 && trainNumber <= 999) && !register.trainNumberExistsInPerm(
-            trainNumber)) {
+        if ((trainNumber >= 0 && trainNumber <= 999) && register
+            .searchByTrainNumber(trainNumber) == null) {
           return trainNumber;
         } else {
           if (trainNumber <= 0 || trainNumber > 999) {
@@ -308,6 +331,8 @@ public class UserInterface {
         }
       } catch (NumberFormatException e) {
         System.out.println(INVALID_NUMBER_FORMAT);
+      } catch (IOException e) {
+        System.out.println(ERROR + e.getMessage());
       }
     }
   }
@@ -331,6 +356,8 @@ public class UserInterface {
 
       } catch (NumberFormatException e) {
         System.out.println(INVALID_NUMBER_FORMAT);
+      } catch (IOException e) {
+        System.out.println(ERROR + e.getMessage());
       }
     }
   }
@@ -351,7 +378,8 @@ public class UserInterface {
         if (matcher.find()) {
           return destination;
         } else {
-          System.out.println(ERROR + "Invalid format. Please enter the destination in the correct format (e.g., Oslo S, Lillestrøm).");
+          System.out.println(ERROR
+              + "Invalid format. Please enter the destination in the correct format (e.g., Oslo S, Lillestrøm).");
         }
       } else {
         System.out.println(ERROR + "Input cannot be empty. Please try again.");

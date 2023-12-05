@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.ArrayList;
 
 /**
  * This class reads/writes TrainDeparture objects of/to the permanent register.
@@ -48,18 +49,23 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
    */
 
   @Override
-  public void writeDepartureToCsv(TrainDeparture departure)
-      throws IOException {
+  public void writeDeparture(TrainDeparture departure) throws IOException {
     Path path = Paths.get(pathOfFile + fileName);
     String formattedDeparture = departure.getDepartureTime() + "," + departure
         .getLine() + "," + departure.getTrainNumber() + "," + departure
         .getDestination() + "," + departure.getTrack() + "," + departure.getDelay() + ",";
 
-    if (!Files.exists(path) || Files.size(path) == 0) {
-      Files.write(path, Collections.singletonList(CSV_HEADER), StandardOpenOption.CREATE);
+    try {
+      if (!Files.exists(path) || Files.size(path) == 0) {
+        Files.write(path, Collections.singletonList(CSV_HEADER), StandardOpenOption.CREATE);
+      }
+
+      Files.write(path, Collections.singletonList(formattedDeparture), StandardOpenOption.APPEND);
+    } catch (IOException e) {
+      throw new IOException(ERROR + "writing to file: " + path, e);
     }
 
-    Files.write(path, Collections.singletonList(formattedDeparture), StandardOpenOption.APPEND);
+
   }
 
   /**
@@ -69,9 +75,9 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
    * @throws IOException if the file does not exist.
    */
   @Override
-  public void removeDepartureFromCsv(int trainNumber)
-      throws IOException {
+  public void removeDeparture(int trainNumber) throws IOException {
     Path path = Paths.get(pathOfFile, fileName);
+
     if (!Files.exists(path)) {
       throw new IOException(FILE_DOES_NOT_EXIST + path);
     }
@@ -83,11 +89,15 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
           .filter(line -> !line.contains("," + trainNumber + ","))
           .toList();
     } catch (IOException e) {
-      throw new IOException(ERROR + "reading file: " + path, e);
+      throw new IOException(ERROR + "reading file: " + path);
     }
     // --
 
-    Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
+    try {
+      Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
+    } catch (IOException e) {
+      throw new IOException(ERROR + "writing to file: " + path, e);
+    }
   }
 
   /**
@@ -97,7 +107,7 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
    * @throws IOException if the file does not exist
    */
   @Override
-  public void updateDepartureToCsv(TrainDeparture departure) throws IOException {
+  public void updateDeparture(TrainDeparture departure) throws IOException {
     Path path = Paths.get(pathOfFile, fileName);
     if (!Files.exists(path)) {
       throw new IOException(FILE_DOES_NOT_EXIST + path);
@@ -133,16 +143,17 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
   /**
    * Reads the csv file and adds the TrainDeparture object to the TrainDepartureRegister object.
    *
-   * @param departures the departures to add.
    * @throws IOException if the file does not exist.
    */
 
   @Override
-  public List<TrainDeparture> readCsv(List<TrainDeparture> departures) throws IOException {
+  public List<TrainDeparture> readDepartures() throws IOException {
     Path path = Paths.get(pathOfFile, fileName);
     if (!Files.exists(path)) {
       throw new IOException(FILE_DOES_NOT_EXIST + path);
     }
+
+    List<TrainDeparture> departures = new ArrayList<>();
 
     // SonarLint suggested this code --
     try (Stream<String> lines = Files.lines(path)) {
@@ -180,36 +191,6 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
     return departures;
   }
 
-
-  /**
-   * Checks if a train number exists in the csv file.
-   *
-   * @param trainNumber the train number to check.
-   * @return true if the train number exists in the csv file, false otherwise.
-   * @throws IOException if the file does not exist
-   */
-  @Override
-  public boolean trainNumberExistsInCsv(int trainNumber)
-      throws IOException {
-    Path path = Paths.get(pathOfFile + fileName);
-    if (!Files.exists(path)) {
-      throw new IOException(FILE_DOES_NOT_EXIST + path);
-    }
-
-    // SonarLint suggested this code --
-    List<String> lines;
-    try (Stream<String> stream = Files.lines(path)) {
-      lines = stream
-          .filter(line -> line.contains("," + trainNumber + ","))
-          .toList();
-    } catch (IOException e) {
-      throw new IOException(ERROR + "reading file: " + path);
-    }
-    // --
-
-    return !lines.isEmpty();
-  }
-
   // Used for testing
 
   /**
@@ -218,7 +199,7 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
    * @throws IOException if the file does not exist.
    */
   @Override
-  public void flushCsv() throws IOException {
+  public void clearDepartures() throws IOException {
     Path path = Paths.get(pathOfFile + fileName);
 
     if (!Files.exists(path)) {
