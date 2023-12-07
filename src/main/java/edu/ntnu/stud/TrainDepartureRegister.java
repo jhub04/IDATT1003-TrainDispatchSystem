@@ -26,7 +26,7 @@ public class TrainDepartureRegister {
   /**
    * Constructor with file path and name.
    */
-  public TrainDepartureRegister(CsvTrainDeparturePersistence persistence) {
+  public TrainDepartureRegister(TrainDeparturePersistence persistence) {
     this.persistence = persistence;
     this.systemTime = LocalTime.of(0, 0);
   }
