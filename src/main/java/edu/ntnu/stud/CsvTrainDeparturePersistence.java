@@ -47,7 +47,6 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
    * @param departure the departure to write to file.
    * @throws IOException if the file already exists.
    */
-
   @Override
   public void writeDeparture(TrainDeparture departure) throws IOException {
     Path path = Paths.get(pathOfFile + fileName);
@@ -145,7 +144,6 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
    *
    * @throws IOException if the file does not exist.
    */
-
   @Override
   public List<TrainDeparture> readDepartures() throws IOException {
     Path path = Paths.get(pathOfFile, fileName);
