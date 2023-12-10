@@ -21,7 +21,7 @@ public class UserInterface {
   private final TrainDepartureRegister register;
 
   private final Scanner input;
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+  private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
   private static final String INVALID_TIME_FORMAT = "Invalid time format. Please try again.";
   private static final String INVALID_NUMBER_FORMAT = "Invalid number format. Please try again.";
@@ -32,7 +32,7 @@ public class UserInterface {
   /**
    * Constructor for UserInterface.
    */
-  public UserInterface(CsvTrainDeparturePersistence persistence) {
+  public UserInterface(TrainDeparturePersistence persistence) {
     this.register = new TrainDepartureRegister(persistence);
     this.input = new Scanner(System.in);
   }
