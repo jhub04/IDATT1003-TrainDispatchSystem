@@ -300,7 +300,8 @@ public class UserInterface {
         } else {
           System.out.println(
               ERROR
-                  + "Invalid format. Please enter the line in the correct format (e.g., L1, RE11).");
+                  + "Invalid format. Please enter the line in the correct format "
+                  + "(e.g., L1, RE11).");
         }
       } else {
         System.out.println(ERROR + "Input cannot be empty. Please try again.");
@@ -379,7 +380,8 @@ public class UserInterface {
           return destination;
         } else {
           System.out.println(ERROR
-              + "Invalid format. Please enter the destination in the correct format (e.g., Oslo S, Lillestrøm).");
+              + "Invalid format. Please enter the destination in the correct format"
+              + " (e.g., Oslo S, Lillestrøm).");
         }
       } else {
         System.out.println(ERROR + "Input cannot be empty. Please try again.");

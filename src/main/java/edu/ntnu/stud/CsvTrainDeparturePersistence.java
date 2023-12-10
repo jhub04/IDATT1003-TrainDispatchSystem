@@ -7,11 +7,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-import java.util.ArrayList;
 
 /**
  * This class reads/writes TrainDeparture objects of/to the permanent register.
@@ -26,7 +26,8 @@ public class CsvTrainDeparturePersistence implements TrainDeparturePersistence {
   private final String fileName;
   private static final String FILE_DOES_NOT_EXIST = "File does not exist: ";
   private static final String ERROR = "Error ";
-  private static final String CSV_HEADER = "Departure time,Line,Train number,Destination,Track,Delay,";
+  private static final String CSV_HEADER = "Departure time,Line,Train number,"
+      + "Destination,Track,Delay,";
   private static final int DEPARTURE_DATA_LENGTH = 6;
 
   /**
