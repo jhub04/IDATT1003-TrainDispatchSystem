@@ -276,7 +276,7 @@ public class TrainDepartureRegister {
    * @return the number of departures in the register.
    */
 
-  int getNumberOfDepartures() throws IOException {
+  public int getNumberOfDepartures() throws IOException {
     return persistence.readDepartures().size();
   }
 
