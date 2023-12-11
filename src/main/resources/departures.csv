@@ -1,5 +1,5 @@
 Departure time,Line,Train number,Destination,Track,Delay
 14:00,FLY1,13,gardermoen,-1,00:10,
-12:30,K9,2,tromsø,55,00:00,
+12:30,K9,2,tromsø,4,00:00
 13:00,L1,4,spikkestad,1,00:00
 15:00,RE11,31,skien,-1,00:00,
